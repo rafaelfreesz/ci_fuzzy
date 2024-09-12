@@ -8,11 +8,14 @@ def fuzzify(xs, function):
        ys.append(function(x))
     return ys
 
-def prepare_run(filename):
+def prepare(filename):
     file = pd.read_csv(filename)
-    build_functions(file)
 
-def build_functions(file):
+    groups = build_groups(file);
+
+    return groups
+
+def build_groups(file):
     fuzzy_groups=[]
     for a in range(len(file)):
         obj=fg.Fuzzy()
@@ -27,11 +30,7 @@ def build_functions(file):
         obj.define_function()
         fuzzy_groups.append(obj)
      
-    print(len(fuzzy_groups))
-    for a in range(len(file)):
-        print(fuzzy_groups[a])
-
-    # print(type(file))
+    return fuzzy_groups
 
 
     
