@@ -15,17 +15,19 @@ class Fuzzy:
         return f"f_name: {self.f_name}  \nf_spec: {self.f_spec}  \nf_type: {self.f_type}  \na: {self.a}  \nb: {self.b}  \nc: {self.c}  \nd: {self.d}  \nm: {self.m}"
     
     def define_function(self):
-        if self.f_type == 'trap_asc':
+        if self.f_type == "trap_asc":
             def function(x):
                 return ff.trap_asc(self.a,self.b,x)
-        elif self.f_type == 'trap_desc':
+            self.function = function
+        elif self.f_type == "trap_desc":
             def function(x):
                 return ff.trap_desc(self.c,self.d,x)
-        elif self.f_type == 'trap_full':
+            self.function = function
+        elif self.f_type == "trap_full":
             def function(x):
                 return ff.trap_full(self.a,self.b,self.c,self.d,x)
+            self.function = function
         else:
             print("DUMB")
-
 
     
