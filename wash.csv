@@ -1,4 +1,4 @@
-f_name,f_spec,f_tipe,a,b,c,d,m
+f_name,f_spec,f_type,a,b,c,d,m
 i,j,trap_desc,,,20,45,
 i,mi,trap_full,25,45,60,65,
 i,i,trap_asc,60,65,,,
