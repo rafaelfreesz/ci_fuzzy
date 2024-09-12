@@ -12,7 +12,7 @@ def trap_asc(a,b,x):
         return 1
     else:
         return (x-a)/(b-a)
-def trap_desc(a,b,c,d,x):
+def trap_full(a,b,c,d,x):
     if x <= a or x >= d:
         return 0
     elif x > a and x < b:
