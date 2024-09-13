@@ -7,7 +7,7 @@ def run_wash():
     sujeira = st.sidebar.slider("Selecione a quantidade de sujeira:", min_value=0, max_value=100,value=50,step=1)
     mancha = st.sidebar.slider("Selecione a quantidade de manchas:", min_value=0, max_value=100,value=50,step=1)
 
-    graphs,strs, groups = pmaq.set_values(sujeira, mancha)
+    graphs,strs, groups = pmaq.fuzzify(sujeira, mancha)
 
     st.write("### 1. Fuzzificação")
 
@@ -24,6 +24,10 @@ def run_wash():
     rules, str_rules = pmaq.infer(groups,sujeira,mancha)
     st.write(str_rules)
 
+    st.write("### 3. Defuzzificação")
+
+    graph_y = pmaq.defuzzify(groups,sujeira,mancha)
+    st.plotly_chart(graph_y)
     st.write("FIM")
 
 problema_selecionado = st.sidebar.selectbox(

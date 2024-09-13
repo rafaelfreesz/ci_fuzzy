@@ -3,6 +3,27 @@ import fuzzylib as fl
 import utils as ut
 import plotly.graph_objects as go
 
+#Defuzzificação
+def defuzzify(groups,sujeira,mancha):
+    graph_y = build_graph_y(groups)
+    return graph_y
+
+def build_graph_y(groups):
+    graph = go.Figure()
+    x_mc = np.linspace(0,int(groups[6].b),int(groups[6].b)+1)
+    x_c = np.linspace(int(groups[7].a),int(groups[7].b),int(groups[7].b)+1)
+    x_m = np.linspace(int(groups[8].a),int(groups[8].b),int(groups[8].b)+1)
+    x_l = np.linspace(int(groups[9].a),int(groups[9].b),int(groups[8].b)+1)
+    x_ml = np.linspace(int(groups[10].a),int(groups[10].m),int(groups[10].m-groups[10].a)+1)
+
+    graph.add_trace(go.Scatter(x=x_mc, y=ut.array_apply(x_mc,groups[6].f), mode='lines', name=f"{groups[6].f_name}_{groups[6].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_c, y=ut.array_apply(x_c,groups[7].f), mode='lines', name=f"{groups[7].f_name}_{groups[7].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_ml, y=ut.array_apply(x_ml,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}"))
+    
+    graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Saída")
+    return graph
 #Calcula e retorna os resultados da inferência
 def infer(groups,sujeira,mancha):
     rules = fl.prepare_infer_assoc_mem("01_wash/wash_rules.csv")
@@ -56,10 +77,8 @@ def infer(groups,sujeira,mancha):
 
     return rules, str_rules
 
-
-
 #Calcula e retorna os valores e gráficos para a Fuzzificação
-def set_values(sujeira, mancha):
+def fuzzify(sujeira, mancha):
     groups = fl.prepare_fuzz("01_wash/wash_x.csv")
 
     graphs=[]
