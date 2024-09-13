@@ -11,10 +11,18 @@ problema_selecionado = st.sidebar.selectbox(
 if problema_selecionado == "Máquina de Lavar":
     
     sujeira = st.sidebar.slider("Selecione a quantidade de sujeira:", min_value=0, max_value=100,value=50,step=1)
+    mancha = st.sidebar.slider("Selecione a quantidade de manchas:", min_value=0, max_value=100,value=50,step=1)
 
-    graph_sujeira,str_resultado_sujeira=pmaq.set_values(sujeira)
+    graphs,strs=pmaq.set_values(sujeira, mancha)
 
     st.write("## 1. Fuzzificação")
-    st.plotly_chart(graph_sujeira)
-    st.warning(str_resultado_sujeira)
+
+    #Imprimindo Gráfico de Sujeira
+    st.plotly_chart(graphs[0])
+    st.warning(strs[0])
+    
+    #Imprimindo Gráfico de Mancha
+    st.plotly_chart(graphs[1])
+    st.warning(strs[1])
+    
     st.write("FIM")
