@@ -28,7 +28,7 @@ def run_wash():
 
     st.write("### 3. Defuzzificação")
 
-    graph_y = pmaq.defuzzify(groups,sujeira,mancha)
+    graph_y = pmaq.defuzzify(groups,trigged_rules, "mamdani")
     st.plotly_chart(graph_y)
     st.write("FIM")
 

@@ -2,13 +2,21 @@ import numpy as np
 import fuzzylib as fl
 import utils as ut
 import plotly.graph_objects as go
+import copy
 
 #Defuzzificação
-def defuzzify(groups,sujeira,mancha):
-    graph_y = build_graph_y(groups)
+def defuzzify(groups,trigged_rules, method):
+
+    trigged_areas=None
+
+    if(method == 'mamdani'):
+        trigged_areas = calculate_mamdani(trigged_rules,groups)
+
+    graph_y = build_graph_y(groups, trigged_areas)
+    
     return graph_y
 
-def build_graph_y(groups):#, rules):
+def build_graph_y(groups, triggered_areas):
     graph = go.Figure()
     x_mc = np.linspace(0,int(groups[6].b),int(groups[6].b)+1)
     x_c = np.linspace(int(groups[7].a),int(groups[7].b),int(groups[7].b)+1)
@@ -21,11 +29,34 @@ def build_graph_y(groups):#, rules):
     graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}"))
     graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}"))
     graph.add_trace(go.Scatter(x=x_ml, y=ut.array_apply(x_ml,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}"))
+
+    graph.add_trace(go.Scatter(x=x_mc, y=ut.array_apply(x_mc,groups[6].f), mode='lines', name=f"uuuu", stackgroup='one'))
     
     graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Saída")
     return graph
 
-# def calculate_mamdani():
+def calculate_mamdani(trigged_rules,groups):
+    trigged_groups = []
+    for i in range(len(trigged_rules)):
+        j=-1
+        group = groups[j]
+
+        while group.f_spec != trigged_rules[i].vars[-1]:
+            j=j-1
+            group = groups[j]
+
+        trigged_group = copy.deepcopy(group)
+        trigged_groups.append(trigged_group)
+
+    print('GROUPS:')
+    for i in range(len(groups)):
+        print(groups[i])
+    print('TRIIGGED RULES:')
+    for i in range(len(trigged_rules)):
+        print(trigged_rules[i])
+    print('TRIIGGED GROUPS:')
+    for i in range(len(trigged_groups)):
+        print(trigged_groups[i])
 
 #Calcula e retorna os resultados da inferência
 def infer(groups,sujeira,mancha):
