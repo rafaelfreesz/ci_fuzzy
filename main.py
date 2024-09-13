@@ -21,8 +21,10 @@ def run_wash():
     
     st.write("### 2. Inferência")
 
-    rules, str_rules = pmaq.infer(groups,sujeira,mancha)
-    st.write(str_rules)
+    rules, str_rules, trigged_rules, str_trigged_rules = pmaq.infer(groups,sujeira,mancha)
+    
+    st.write(str_rules + "\n Regras selecionadas de acordo com critério MAX-MIN:\n" + str_trigged_rules)
+
 
     st.write("### 3. Defuzzificação")
 

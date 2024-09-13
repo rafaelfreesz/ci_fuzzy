@@ -8,7 +8,7 @@ def defuzzify(groups,sujeira,mancha):
     graph_y = build_graph_y(groups)
     return graph_y
 
-def build_graph_y(groups):
+def build_graph_y(groups):#, rules):
     graph = go.Figure()
     x_mc = np.linspace(0,int(groups[6].b),int(groups[6].b)+1)
     x_c = np.linspace(int(groups[7].a),int(groups[7].b),int(groups[7].b)+1)
@@ -24,6 +24,9 @@ def build_graph_y(groups):
     
     graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Saída")
     return graph
+
+# def calculate_mamdani():
+
 #Calcula e retorna os resultados da inferência
 def infer(groups,sujeira,mancha):
     rules = fl.prepare_infer_assoc_mem("01_wash/wash_rules.csv")
@@ -75,7 +78,43 @@ def infer(groups,sujeira,mancha):
         else:
             str_rules = str_rules + f"- {rules[i]}  \n"
 
-    return rules, str_rules
+    trigged_rules = get_rules_max_min(rules)
+    str_trigged_rules = ""
+    for i in range(len(trigged_rules)):
+        str_trigged_rules = str_trigged_rules + f"- {trigged_rules[i]}  \n"
+
+
+    return rules, str_rules, trigged_rules, str_trigged_rules
+
+#Cria um subgrupo de regras disparadas de acordo com o critério Max-Min
+def get_rules_max_min(rules):
+    rules_sel=[None,None,None,None,None]
+    for i in range(len(rules)):
+        rule = rules[i]
+        index = -1
+        if rule.vars[-1] == "mc":
+            index = 0
+        elif rule.vars[-1] == "c":
+            index = 1
+        elif rule.vars[-1] == "m":
+            index = 2
+        elif rule.vars[-1] == "l":
+            index = 3
+        elif rule.vars[-1] == "ml":
+            index = 4
+        else:
+            print("DUMB"+str(rule.vars[-1]))
+        
+        if rules_sel[index] is None or rules_sel[index].values[-1] < rule.values[-1]:
+            rules_sel[index] = rules[i]
+
+    rules_max_min=[]
+
+    for i in range(len(rules_sel)):
+        if rules_sel[i] is not None and rules_sel[i].values[-1] > 0.0:
+            rules_max_min.append(rules_sel[i])
+    
+    return rules_max_min
 
 #Calcula e retorna os valores e gráficos para a Fuzzificação
 def fuzzify(sujeira, mancha):
