@@ -1,5 +1,5 @@
 import fuzzyfunctions as ff
-class Fuzzy:
+class Group:
     def __init__(self) -> None:
         self.v_type="none"
         self.f_type="none"
@@ -43,4 +43,11 @@ class Fuzzy:
         else:
             print("DUMB")
 
+class Rule:
+    def __init__(self) -> None:
+        self.index=-1
+        self.vars=[]
+        self.values=[]
     
+    def __str__(self) -> str:
+       return f"R{self.index} - Se {self.vars[0]}({self.values[0]}) e {self.vars[1]}({self.values[1]}) entao {self.vars[2]}({self.values[2]})" 

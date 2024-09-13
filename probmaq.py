@@ -3,8 +3,12 @@ import fuzzylib as fl
 import utils as ut
 import plotly.graph_objects as go
 
+def infer():
+    fl.prepare_infer_assoc_mem("01_wash/wash_rules.csv")
+
+#Calcula e retorna os valores e gráficos para a Fuzzificação
 def set_values(sujeira, mancha):
-    groups = fl.prepare("01_wash/wash_x.csv")
+    groups = fl.prepare_fuzz("01_wash/wash_x.csv")
 
     graphs=[]
     strs=[]
@@ -21,7 +25,7 @@ def set_values(sujeira, mancha):
     graphs.append(graph_mancha)
     strs.append(str_resultado_mancha)
 
-    return (graphs,strs)
+    return (graphs,strs,groups)
 
 #Constroi e seta atributos do grafico de sujeira
 def build_graph_sujeira(sujeira,groups):
