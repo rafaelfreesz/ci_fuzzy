@@ -1,4 +1,12 @@
-f_name,f_spec,f_type,a,b,c,d,m
-i,j,trap_desc,,,20,45,
-i,mi,trap_full,25,45,60,65,
-i,i,trap_asc,60,65,,,
+v_type,f_name,f_spec,f_type,a,b,c,d,m
+x,sujeira,p,tri_desc,,50,,,0
+x,sujeira,m,tri_full,0,100,,,50
+x,sujeira,g,tri_asc,50,,,,100
+x,mancha,s,tri_desc,,50,,,0
+x,mancha,m,tri_full,0,100,,,50
+x,mancha,g,tri_asc,50,,,,100
+y,tempo,mc,tri_desc,,10,,,0
+y,tempo,c,tri_full,0,25,,,10
+y,tempo,m,tri_full,10,40,,,25
+y,tempo,l,tri_full,25,60,,,40
+y,tempo,ml,tri_asc,40,,,,60

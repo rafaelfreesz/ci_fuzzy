@@ -19,6 +19,7 @@ def build_groups(file):
     fuzzy_groups=[]
     for a in range(len(file)):
         obj=fg.Fuzzy()
+        obj.v_type = file.iloc[a]['v_type']
         obj.f_type = file.iloc[a]['f_type']
         obj.f_name = file.iloc[a]['f_name']
         obj.f_spec = file.iloc[a]['f_spec']
@@ -27,10 +28,7 @@ def build_groups(file):
         obj.c = file.iloc[a]['c']
         obj.d = file.iloc[a]['d']
         obj.m = file.iloc[a]['m']
-        obj.define_function()
+        obj.define_f()
         fuzzy_groups.append(obj)
      
     return fuzzy_groups
-
-
-    
