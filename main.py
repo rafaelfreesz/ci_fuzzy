@@ -13,15 +13,16 @@ def run_wash():
 
     #Imprimindo Gráfico de Sujeira
     st.plotly_chart(graphs[0])
-    st.warning(strs[0])
+    st.write(strs[0])
     
     #Imprimindo Gráfico de Mancha
     st.plotly_chart(graphs[1])
-    st.warning(strs[1])
+    st.write(strs[1])
     
-    st.write("### 1. Inferência")
+    st.write("### 2. Inferência")
 
-    pmaq.infer()
+    rules, str_rules = pmaq.infer(groups,sujeira,mancha)
+    st.write(str_rules)
 
     st.write("FIM")
 

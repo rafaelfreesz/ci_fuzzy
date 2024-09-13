@@ -3,8 +3,60 @@ import fuzzylib as fl
 import utils as ut
 import plotly.graph_objects as go
 
-def infer():
-    fl.prepare_infer_assoc_mem("01_wash/wash_rules.csv")
+#Calcula e retorna os resultados da inferência
+def infer(groups,sujeira,mancha):
+    rules = fl.prepare_infer_assoc_mem("01_wash/wash_rules.csv")
+
+    val_sujeira = [groups[0].f(sujeira),groups[1].f(sujeira),groups[2].f(sujeira)]
+    val_mancha = [groups[3].f(mancha),groups[4].f(mancha),groups[5].f(mancha)]
+
+    rules[0].values[0] = val_sujeira[0]
+    rules[0].values[1] = val_mancha[0]
+    rules[0].values[2] = min(rules[0].values[0], rules[0].values[1])
+    
+    rules[1].values[0] = val_sujeira[0]
+    rules[1].values[1] = val_mancha[1]
+    rules[1].values[2] = min(rules[1].values[0], rules[1].values[1])
+
+    rules[2].values[0] = val_sujeira[0]
+    rules[2].values[1] = val_mancha[2]
+    rules[2].values[2] = min(rules[2].values[0], rules[2].values[1])
+
+    rules[3].values[0] = val_sujeira[1]
+    rules[3].values[1] = val_mancha[0]
+    rules[3].values[2] = min(rules[3].values[0], rules[3].values[1])
+
+    rules[4].values[0] = val_sujeira[1]
+    rules[4].values[1] = val_mancha[1]
+    rules[4].values[2] = min(rules[4].values[0], rules[4].values[1])
+
+    rules[5].values[0] = val_sujeira[1]
+    rules[5].values[1] = val_mancha[2]
+    rules[5].values[2] = min(rules[5].values[0], rules[5].values[1])
+
+    rules[6].values[0] = val_sujeira[2]
+    rules[6].values[1] = val_mancha[0]
+    rules[6].values[2] = min(rules[6].values[0], rules[6].values[1])
+
+    rules[7].values[0] = val_sujeira[2]
+    rules[7].values[1] = val_mancha[1]
+    rules[7].values[2] = min(rules[7].values[0], rules[7].values[1])
+
+    rules[8].values[0] = val_sujeira[2]
+    rules[8].values[1] = val_mancha[2]
+    rules[8].values[2] = min(rules[8].values[0], rules[8].values[1])
+
+    str_rules = f""
+
+    for i in range(len(rules)):
+        if rules[i].values[2] == 0:
+            str_rules = str_rules + f"-  :gray[~~{rules[i]}~~]  \n"
+        else:
+            str_rules = str_rules + f"- {rules[i]}  \n"
+
+    return rules, str_rules
+
+
 
 #Calcula e retorna os valores e gráficos para a Fuzzificação
 def set_values(sujeira, mancha):
