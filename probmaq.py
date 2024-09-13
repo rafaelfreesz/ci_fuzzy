@@ -8,7 +8,6 @@ def set_graph(sujeira):
     k = ut.group_by(groups,"f_name")
 
     fig = go.Figure()
-
     x_ps = np.linspace(0,int(groups[0].b),int(groups[0].b)+1)
     x_ms = np.linspace(int(groups[1].a),int(groups[1].b),int(groups[1].b)+1)
     x_gs = np.linspace(int(groups[2].a),int(groups[2].m),int(groups[2].m-groups[2].a)+1)
@@ -18,5 +17,7 @@ def set_graph(sujeira):
     fig.add_trace(go.Scatter(x=x_gs, y=ut.array_apply(x_gs,groups[2].f), mode='lines', name=f"{groups[2].f_name}_{groups[2].f_spec}"))
     fig.add_vline(x=sujeira, line_width=3, line_dash="dash",line_color="green")
 
+    fig.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Quantidade de Sujeira")
     return fig
 
+# def printN
