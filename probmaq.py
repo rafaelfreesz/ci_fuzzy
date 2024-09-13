@@ -7,16 +7,16 @@ import copy
 #Defuzzificação
 def defuzzify(groups,trigged_rules, method):
 
-    trigged_areas=None
+    trigged_groups=None
 
     if(method == 'mamdani'):
-        trigged_areas = calculate_mamdani(trigged_rules,groups)
+        trigged_groups = calculate_mamdani(trigged_rules,groups)
 
-    graph_y = build_graph_y(groups, trigged_areas)
+    graph_y = build_graph_y(groups,trigged_groups)
     
     return graph_y
 
-def build_graph_y(groups, triggered_areas):
+def build_graph_y(groups,trigged_groups):
     graph = go.Figure()
     x_mc = np.linspace(0,int(groups[6].b),int(groups[6].b)+1)
     x_c = np.linspace(int(groups[7].a),int(groups[7].b),int(groups[7].b)+1)
@@ -30,13 +30,113 @@ def build_graph_y(groups, triggered_areas):
     graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}"))
     graph.add_trace(go.Scatter(x=x_ml, y=ut.array_apply(x_ml,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}"))
 
-    graph.add_trace(go.Scatter(x=x_mc, y=ut.array_apply(x_mc,groups[6].f), mode='lines', name=f"uuuu", stackgroup='one'))
+    print(trigged_groups[0])
+    tg=None
+    for i in range(len(trigged_groups)):
+        if trigged_groups[i].f_spec == "mc":
+            tg = trigged_groups[i]
+            break
+    
+    if tg is not None:
+        if tg.f_type != "tri_desc":
+            xs=np.linspace(0,tg.d,10*int(tg.d)+1)
+        else:
+            xs = x_mc
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=1))
+        
+    tg=None
+    for i in range(len(trigged_groups)):
+        if trigged_groups[i].f_spec == "c":
+            tg = trigged_groups[i]
+            break
+    
+    if tg is not None:
+        if tg.f_type != "tri_full":
+            xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
+        else:
+            xs = x_c
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=2))
+
+    tg=None
+    for i in range(len(trigged_groups)):
+        if trigged_groups[i].f_spec == "m":
+            tg = trigged_groups[i]
+            break
+    
+    if tg is not None:
+        if tg.f_type != "tri_full":
+            xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
+        else:
+            xs = x_m
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=3))
+    tg=None
+    for i in range(len(trigged_groups)):
+        if trigged_groups[i].f_spec == "l":
+            tg = trigged_groups[i]
+            break
+    
+    if tg is not None:
+        if tg.f_type != "tri_full":
+            xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
+        else:
+            xs = x_l
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=4))
+    tg=None
+    for i in range(len(trigged_groups)):
+        if trigged_groups[i].f_spec == "ml":
+            tg = trigged_groups[i]
+            break
+    
+    if tg is not None:
+        if tg.f_type != "tri_asc":
+            print(tg)
+            xs=np.linspace(int(tg.a),int(tg.b),10*int(tg.b-tg.a)+1)
+        else:
+            xs = x_ml
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=5))
+        
+
+    # for i in range(len(trigged_groups)):
+    #     xs=None
+    #     if(trigged_groups[i].f_spec == "mc"):
+    #         if trigged_groups[i].f_type != "tri_full":
+    #             xs=np.linspace(0,trigged_groups[i].d,int(trigged_groups[i].d)+1)
+    #         else:
+    #             xs = x_mc
+    #     elif(trigged_groups[i].f_spec == "c"):
+    #         if trigged_groups[i].f_type != "tri_full":
+    #             xs=np.linspace(int(trigged_groups[i].a),int(trigged_groups[i].d),int(trigged_groups[i].d-trigged_groups[i].a)+1)
+    #         else:
+    #             xs = x_c
+    #     elif(trigged_groups[i].f_spec == "m"):
+    #         if trigged_groups[i].f_type != "tri_full":
+    #             xs=np.linspace(int(trigged_groups[i].a),int(trigged_groups[i].d),int(trigged_groups[i].d-trigged_groups[i].a)+1)
+    #         else:
+    #             xs = x_m
+    #     elif(trigged_groups[i].f_spec == "l"):
+    #         print(trigged_groups[i])
+    #         if trigged_groups[i].f_type != "tri_full":
+    #             xs=np.linspace(int(trigged_groups[i].a),int(trigged_groups[i].d),int(trigged_groups[i].d-trigged_groups[i].a)+1)
+    #         else:
+    #             xs = x_l
+    #     elif(trigged_groups[i].f_spec == "ml"):
+    #         if trigged_groups[i].f_type != "tri_full":
+    #             xs=xs=np.linspace(int(trigged_groups[i].a),60,61-int(trigged_groups[i].a))
+    #         else:
+    #             xs = x_ml
+    #     else:
+    #         print("SUMB")
+        
+    #     if xs is not None:
+    #         print(trigged_groups[i])
+    #         graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,trigged_groups[i].f), mode='lines', name=f"y({trigged_groups[i].f_name}_{trigged_groups[i].f_spec})", stackgroup='one'))
     
     graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Saída")
     return graph
 
 def calculate_mamdani(trigged_rules,groups):
     trigged_groups = []
+    group_rule_tuples = []
     for i in range(len(trigged_rules)):
         j=-1
         group = groups[j]
@@ -46,17 +146,29 @@ def calculate_mamdani(trigged_rules,groups):
             group = groups[j]
 
         trigged_group = copy.deepcopy(group)
+        group_rule_tuples.append((trigged_group,trigged_rules[i]))
+        
         trigged_groups.append(trigged_group)
 
-    print('GROUPS:')
-    for i in range(len(groups)):
-        print(groups[i])
-    print('TRIIGGED RULES:')
-    for i in range(len(trigged_rules)):
-        print(trigged_rules[i])
-    print('TRIIGGED GROUPS:')
-    for i in range(len(trigged_groups)):
-        print(trigged_groups[i])
+    #Modificando a área do grafico em função das regras disparadas
+    for i in range(len(group_rule_tuples)):
+        if group_rule_tuples[i][1].values[-1] < 1:
+            if group_rule_tuples[i][0].f_type == "tri_asc":
+               fl.ff.reverse_tri_asc(group_rule_tuples[i][0],group_rule_tuples[i][1])
+            elif group_rule_tuples[i][0].f_type == "tri_desc":
+               fl.ff.reverse_tri_desc(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "tri_full":
+               fl.ff.reverse_tri_full(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "trap_desc":
+               fl.ff.reverse_trap_desc(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "trap_asc":
+               fl.ff.reverse_trap_asc(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "trap_full":
+               fl.ff.reverse_trap_full(group_rule_tuples[i][0],group_rule_tuples[i][1])
+            else:
+                print("DUMB")
+            
+    return trigged_groups
 
 #Calcula e retorna os resultados da inferência
 def infer(groups,sujeira,mancha):
