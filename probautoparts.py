@@ -27,9 +27,9 @@ def fuzzify(tempo, fator, funcionarios):
 #Constroi e seta atributos do grafico de tempo
 def build_graph_tempo(tempo,groups):
     graph = go.Figure()
-    x_mp = np.linspace(0.0,0.3,int(0.3*100.0))
-    x_p = np.linspace(0.1,0.5,int((0.5-0.1)*100.0))
-    x_m = np.linspace(0.4,0.7,int((0.7-0.4)*100.0))
+    x_mp = np.linspace(0.0,0.3,int(0.3*1000.0))
+    x_p = np.linspace(0.1,0.5,int((0.5-0.1)*1000.0))
+    x_m = np.linspace(0.4,0.7,int((0.7-0.4)*1000.0))
 
     graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[0].f), mode='lines', name=f"{groups[0].f_name}_{groups[0].f_spec}"))
     graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[1].f), mode='lines', name=f"{groups[1].f_name}_{groups[1].f_spec}"))
@@ -42,9 +42,9 @@ def build_graph_tempo(tempo,groups):
 #Constroi e seta atributos do grafico de fator
 def build_graph_fator(fator,groups):
     graph = go.Figure()
-    x_b = np.linspace(0.0,0.4,int(0.4*100.0))
-    x_m = np.linspace(0.3,0.7,int((0.7-0.3)*100.0))
-    x_a = np.linspace(0.6,1.0,int((1.0-0.6)*100.0))
+    x_b = np.linspace(0.0,0.4,int(0.4*1000.0))
+    x_m = np.linspace(0.3,0.7,int((0.7-0.3)*1000.0))
+    x_a = np.linspace(0.6,1.0,int((1.0-0.6)*1000.0))
     print(groups[3])
     print(groups[4])
     print(groups[5])
