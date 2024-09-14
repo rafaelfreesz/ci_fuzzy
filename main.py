@@ -6,6 +6,11 @@ import probwash as p_wash
 def run_wash():
     sujeira = st.sidebar.slider("Selecione a quantidade de sujeira:", min_value=0, max_value=100,value=50,step=1)
     mancha = st.sidebar.slider("Selecione a quantidade de manchas:", min_value=0, max_value=100,value=50,step=1)
+    metodo_defuzz = st.sidebar.selectbox(
+        "Selecione o Método de Defuzzificação:",
+        ("Média Ponderada","Centro de Gravidade - CoG"),
+        index=0
+    )
 
     graphs,strs, groups = p_wash.fuzzify(sujeira, mancha)
 
@@ -28,8 +33,9 @@ def run_wash():
 
     st.write("### 3. Defuzzificação")
 
-    graph_y = p_wash.defuzzify(groups,triggered_rules, "mamdani")
+    graph_y, res_str = p_wash.defuzzify(groups,triggered_rules, "mamdani")
     st.plotly_chart(graph_y)
+    st.write(res_str)
     st.write("FIM")
 
 problema_selecionado = st.sidebar.selectbox(
