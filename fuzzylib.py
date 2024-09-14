@@ -2,6 +2,38 @@ import pandas as pd
 import fuzzyfunctions as ff
 import fuzzyentities as fe
 
+#Calcula o ponto medio de uma area
+def calculate_midle_point(group):
+    if group.f_type == "trap_full":
+        return group.a + (group.d - group.a)/2
+    elif group.f_type == "trap_asc":
+        return group.a + (group.b - group.a)/2
+    elif group.f_type == "trap_desc":
+        return group.c + (group.d - group.c)/2
+    elif group.f_type == "tri_full":
+        return group.a + (group.b - group.a)/2
+    elif group.f_type == "tri_asc":
+        return group.a + (group.m - group.a)/2
+    elif group.f_type == "tri_full":
+        return group.m + (group.b - group.m)/2
+    
+#Calcula a média ponderada do ponto médio de cada forma
+def defuzz_weighted_average(triggered_groups,triggered_rules):
+    sum = 0
+    denominator = 0
+    
+    for i in range(len(triggered_groups)):
+        group = triggered_groups[i]
+        rule = None
+        for j in range(len(triggered_rules)):
+            if triggered_rules[j].vars[-1] == group.f_spec:
+                rule = triggered_rules[j]
+                break
+        middle = calculate_midle_point(group)
+        sum = sum + middle * rule.values[-1]
+        denominator = denominator + rule.values[-1]
+    return sum/denominator
+
 def prepare_infer_assoc_mem(filename):
     file = pd.read_csv(filename)
     matriz = [file.columns.tolist()]+file.values.tolist()

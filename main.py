@@ -33,7 +33,7 @@ def run_wash():
 
     st.write("### 3. Defuzzificação")
 
-    graph_y, res_str = p_wash.defuzzify(groups,triggered_rules, "mamdani")
+    graph_y, res_str = p_wash.defuzzify(groups,triggered_rules, metodo_defuzz)
     st.plotly_chart(graph_y)
     st.write(res_str)
     st.write("FIM")
