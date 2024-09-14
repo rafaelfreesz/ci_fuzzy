@@ -1,12 +1,20 @@
 import streamlit as st
 import plotly.graph_objects as go
 import probwash as p_wash
+import probautoparts as p_auto
 
 def run_autoparts():
     tempo = st.sidebar.slider("Selecione o tempo de espera(m):", min_value=0.0, max_value=0.7,value=0.7/2,step=0.7/100)
     fator = st.sidebar.slider("Selecione o fator de utilização(p):", min_value=0.0, max_value=1.0,value=0.5,step=0.01)
     funcionarios = st.sidebar.slider("Selecione o numero de funcionarios(s):", min_value=0.0, max_value=1.0,value=0.5,step=0.01)
+    
     st.write("### 1. Fuzzificação")
+    graphs,strs, groups = p_auto.fuzzify(tempo, fator, funcionarios)
+
+    #Imprimindo Gráfico de Tempo
+    st.plotly_chart(graphs[0])
+    st.write(strs[0])
+
     st.write("### 2. Inferência")
     st.write("### 3. Defuzzificação")
 
