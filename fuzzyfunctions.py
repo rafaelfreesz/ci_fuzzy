@@ -1,29 +1,29 @@
 #Trapeze Functions
-def trap_desc(c,d,ass,x):
+def trap_desc(c,d,asymp,x):
     if x <= c:
-        return ass
+        return asymp
     elif x >= d:
         return 0
     else:
-        return ass*(d-x)/(d-c)
+        return asymp*(d-x)/(d-c)
     
-def trap_asc(a,b,ass,x):
+def trap_asc(a,b,asymp,x):
     if x <= a:
         return 0
     elif x >= b:
-        return ass
+        return asymp
     else:
-        return ass*(x-a)/(b-a)
+        return asymp*(x-a)/(b-a)
     
-def trap_full(a,b,c,d,ass,x):
+def trap_full(a,b,c,d,asymp,x):
     if x <= a or x >= d:
         return 0
     elif x > a and x < b:
-        return ass*(x-a)/(b-a)
+        return asymp*(x-a)/(b-a)
     elif x > c and x < d:
-        return ass*(d-x)/(d-c)
+        return asymp*(d-x)/(d-c)
     else:
-        return ass
+        return asymp
 
 #Triangle Functions
 def tri_desc(m,b,x):
@@ -48,53 +48,53 @@ def tri_full(a,b,m,x):
 
 #Funções reversas pra encontrar pontos a,b,c,d
 #Vira um trap_asc
-def reverse_tri_asc(group, trigged_rule):
-    new_b = group.a + trigged_rule.values[-1]*(group.m-group.a)
+def reverse_tri_asc(group, triggered_rule):
+    new_b = group.a + triggered_rule.values[-1]*(group.m-group.a)
     group.b = new_b
     group.m = ""
-    group.ass = trigged_rule.values[-1]
+    group.asymp = triggered_rule.values[-1]
     group.f_type="trap_asc"
     group.define_f()
 
 #Vira um trap_desc
-def reverse_tri_desc(group, trigged_rule):
-    new_c = group.b - trigged_rule.values[-1]*(group.b-group.m)
+def reverse_tri_desc(group, triggered_rule):
+    new_c = group.b - triggered_rule.values[-1]*(group.b-group.m)
     group.c = new_c
     group.d = group.b
     group.b = ""
     group.m = ""
-    group.ass = trigged_rule.values[-1]
+    group.asymp = triggered_rule.values[-1]
     group.f_type="trap_desc"
     group.define_f()
-    
+
 #Vira um trap_full
-def reverse_tri_full(group, trigged_rule):
-    new_b = group.a + trigged_rule.values[-1]*(group.m-group.a)
-    new_c = group.b - trigged_rule.values[-1]*(group.b-group.m)
+def reverse_tri_full(group, triggered_rule):
+    new_b = group.a + triggered_rule.values[-1]*(group.m-group.a)
+    new_c = group.b - triggered_rule.values[-1]*(group.b-group.m)
     group.c = new_c
     group.d = group.b
     group.b = new_b
     group.m = ""
-    group.ass = trigged_rule.values[-1]
+    group.asymp = triggered_rule.values[-1]
     group.f_type="trap_full"
     group.define_f()
 
 #Vira um trap_asc
-def reverse_trap_asc(group, trigged_rule):
-    new_b = group.a + trigged_rule.values[-1]*(group.b-group.a)
+def reverse_trap_asc(group, triggered_rule):
+    new_b = group.a + triggered_rule.values[-1]*(group.b-group.a)
     group.b = new_b
-    group.ass = trigged_rule.values[-1]
+    group.asymp = triggered_rule.values[-1]
 
 #Vira um trap_desc
-def reverse_trap_desc(group, trigged_rule):
-    new_c = group.d - trigged_rule.values[-1]*(group.d-group.c)
+def reverse_trap_desc(group, triggered_rule):
+    new_c = group.d - triggered_rule.values[-1]*(group.d-group.c)
     group.c = new_c
-    group.ass = trigged_rule.values[-1]
+    group.asymp = triggered_rule.values[-1]
 
 #Vira um trap_full
-def reverse_trap_full(group, trigged_rule):
-    new_c = group.b + trigged_rule.values[-1]*(group.b-group.m)
-    new_b = group.a + trigged_rule.values[-1]*(group.b-group.a)
+def reverse_trap_full(group, triggered_rule):
+    new_c = group.b + triggered_rule.values[-1]*(group.b-group.m)
+    new_b = group.a + triggered_rule.values[-1]*(group.b-group.a)
     group.b = new_b
     group.c = new_c
-    group.ass = trigged_rule.values[-1]
+    group.asymp = triggered_rule.values[-1]

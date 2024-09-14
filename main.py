@@ -1,14 +1,13 @@
 import streamlit as st
 import plotly.graph_objects as go
-import probmaq as pmaq
+import probwash as p_wash
 
 
 def run_wash():
-    print("\n\n\n")
     sujeira = st.sidebar.slider("Selecione a quantidade de sujeira:", min_value=0, max_value=100,value=50,step=1)
     mancha = st.sidebar.slider("Selecione a quantidade de manchas:", min_value=0, max_value=100,value=50,step=1)
 
-    graphs,strs, groups = pmaq.fuzzify(sujeira, mancha)
+    graphs,strs, groups = p_wash.fuzzify(sujeira, mancha)
 
     st.write("### 1. Fuzzificação")
 
@@ -22,14 +21,14 @@ def run_wash():
     
     st.write("### 2. Inferência")
 
-    rules, str_rules, trigged_rules, str_trigged_rules = pmaq.infer(groups,sujeira,mancha)
+    rules, str_rules, triggered_rules, str_triggered_rules = p_wash.infer(groups,sujeira,mancha)
     
-    st.write(str_rules + "\n Regras selecionadas de acordo com critério MAX-MIN:\n" + str_trigged_rules)
+    st.write(str_rules + "\n Regras selecionadas de acordo com critério MAX-MIN:\n" + str_triggered_rules)
 
 
     st.write("### 3. Defuzzificação")
 
-    graph_y = pmaq.defuzzify(groups,trigged_rules, "mamdani")
+    graph_y = p_wash.defuzzify(groups,triggered_rules, "mamdani")
     st.plotly_chart(graph_y)
     st.write("FIM")
 

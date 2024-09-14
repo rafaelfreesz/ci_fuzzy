@@ -5,18 +5,18 @@ import plotly.graph_objects as go
 import copy
 
 #Defuzzificação
-def defuzzify(groups,trigged_rules, method):
+def defuzzify(groups,triggered_rules, method):
 
-    trigged_groups=None
+    triggered_groups=None
 
     if(method == 'mamdani'):
-        trigged_groups = calculate_mamdani(trigged_rules,groups)
+        triggered_groups = calculate_mamdani(triggered_rules,groups)
 
-    graph_y = build_graph_y(groups,trigged_groups)
+    graph_y = build_graph_y(groups,triggered_groups)
     
     return graph_y
 
-def build_graph_y(groups,trigged_groups):
+def build_graph_y(groups,triggered_groups):
 
     #Graficos variável de saída
     graph = go.Figure()
@@ -38,31 +38,31 @@ def build_graph_y(groups,trigged_groups):
 
 
     #Gráficos de área para resultado
-    for i in range(len(trigged_groups)):
-        tg = trigged_groups[i]
+    for i in range(len(triggered_groups)):
+        tg = triggered_groups[i]
         plot = True
 
-        if trigged_groups[i].f_spec == "mc":
+        if triggered_groups[i].f_spec == "mc":
             if tg.f_type != "tri_desc":
                 xs=np.linspace(0,tg.d,10*int(tg.d)+1)
             else:
                 xs = x_mc
-        elif trigged_groups[i].f_spec == "c":
+        elif triggered_groups[i].f_spec == "c":
             if tg.f_type != "tri_full":
                 xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
             else:
                 xs = x_c
-        elif trigged_groups[i].f_spec == "m":
+        elif triggered_groups[i].f_spec == "m":
             if tg.f_type != "tri_full":
                 xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
             else:
                 xs = x_m
-        elif trigged_groups[i].f_spec == "l":
+        elif triggered_groups[i].f_spec == "l":
             if tg.f_type != "tri_full":
                 xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
             else:
                 xs = x_l
-        elif trigged_groups[i].f_spec == "ml":
+        elif triggered_groups[i].f_spec == "ml":
             if tg.f_type != "tri_asc":
                 xs=np.linspace(int(tg.a),60,10*60+1)
             else:
@@ -77,21 +77,22 @@ def build_graph_y(groups,trigged_groups):
     graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Saída")
     return graph
 
-def calculate_mamdani(trigged_rules,groups):
-    trigged_groups = []
+#Calcula e retorna as regioes conforme o metodo de Mamdani
+def calculate_mamdani(triggered_rules,groups):
+    triggered_groups = []
     group_rule_tuples = []
-    for i in range(len(trigged_rules)):
+    for i in range(len(triggered_rules)):
         j=-1
         group = groups[j]
 
-        while group.f_spec != trigged_rules[i].vars[-1]:
+        while group.f_spec != triggered_rules[i].vars[-1]:
             j=j-1
             group = groups[j]
 
-        trigged_group = copy.deepcopy(group)
-        group_rule_tuples.append((trigged_group,trigged_rules[i]))
+        triggered_group = copy.deepcopy(group)
+        group_rule_tuples.append((triggered_group,triggered_rules[i]))
         
-        trigged_groups.append(trigged_group)
+        triggered_groups.append(triggered_group)
 
     #Modificando a área do grafico em função das regras disparadas
     for i in range(len(group_rule_tuples)):
@@ -111,7 +112,7 @@ def calculate_mamdani(trigged_rules,groups):
             else:
                 print("DUMB")
             
-    return trigged_groups
+    return triggered_groups
 
 #Calcula e retorna os resultados da inferência
 def infer(groups,sujeira,mancha):
@@ -164,13 +165,13 @@ def infer(groups,sujeira,mancha):
         else:
             str_rules = str_rules + f"- {rules[i]}  \n"
 
-    trigged_rules = get_rules_max_min(rules)
-    str_trigged_rules = ""
-    for i in range(len(trigged_rules)):
-        str_trigged_rules = str_trigged_rules + f"- {trigged_rules[i]}  \n"
+    triggered_rules = get_rules_max_min(rules)
+    str_triggered_rules = ""
+    for i in range(len(triggered_rules)):
+        str_triggered_rules = str_triggered_rules + f"- {triggered_rules[i]}  \n"
 
 
-    return rules, str_rules, trigged_rules, str_trigged_rules
+    return rules, str_rules, triggered_rules, str_triggered_rules
 
 #Cria um subgrupo de regras disparadas de acordo com o critério Max-Min
 def get_rules_max_min(rules):

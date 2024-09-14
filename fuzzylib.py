@@ -1,6 +1,6 @@
 import pandas as pd
 import fuzzyfunctions as ff
-import fuzzygroup as fg
+import fuzzyentities as fe
 
 def prepare_infer_assoc_mem(filename):
     file = pd.read_csv(filename)
@@ -11,7 +11,7 @@ def prepare_infer_assoc_mem(filename):
     for i in range(len(matriz)-1):
         for j in range(1,len(matriz[i])):
             # print(j)
-            rule = fg.Rule()
+            rule = fe.Rule()
             rule.index=index
             rule.vars.append(matriz[i][0])
             rule.vars.append(matriz[len(matriz)-1][j])
@@ -35,7 +35,7 @@ def prepare_fuzz(filename):
 def build_groups(file):
     fuzzy_groups=[]
     for a in range(len(file)):
-        obj=fg.Group()
+        obj=fe.Group()
         obj.v_type = file.iloc[a]['v_type']
         obj.f_type = file.iloc[a]['f_type']
         obj.f_name = file.iloc[a]['f_name']
