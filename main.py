@@ -9,7 +9,7 @@ def run_autoparts():
     funcionarios = st.sidebar.slider("Selecione o numero de funcionarios(s):", min_value=0.0, max_value=1.0,value=0.5,step=0.01)
     
     st.write("### 1. Fuzzificação")
-    graphs,strs, groups = p_auto.fuzzify(tempo, fator, funcionarios)
+    graphs, strs, groups = p_auto.fuzzify(tempo, fator, funcionarios)
 
     #Imprimindo Gráfico de Tempo
     st.plotly_chart(graphs[0])
@@ -18,6 +18,10 @@ def run_autoparts():
     #Imprimindo Gráfico de Fator
     st.plotly_chart(graphs[1])
     st.write(strs[1])
+    
+    #Imprimindo Gráfico de Número de Funcionarios
+    st.plotly_chart(graphs[2])
+    st.write(strs[2])
 
     st.write("### 2. Inferência")
     st.write("### 3. Defuzzificação")

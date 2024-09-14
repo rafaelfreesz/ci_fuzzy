@@ -5,8 +5,8 @@ x,tempo,m,trap_asc,0.4,0.6,,,
 x,fator,p,trap_desc,,,0.2,0.4,
 x,fator,m,tri_full,0.3,0.7,,,0.5
 x,fator,g,trap_asc,0.6,0.8,,,
-x,funcionarios,p,trap_desc,,,0.2,0.4,
-x,funcionarios,m,tri_full,0.3,0.7,,,0.5
+x,funcionarios,p,trap_desc,,,0.4,0.6,
+x,funcionarios,m,tri_full,0.4,0.8,,,0.6
 x,funcionarios,g,trap_asc,0.6,0.8,,,
 y,pecas,mp,trap_desc,,,0.1,0.3,
 y,pecas,p,tri_full,0,0.4,,,0.2
