@@ -4,6 +4,7 @@ import probmaq as pmaq
 
 
 def run_wash():
+    print("\n\n\n")
     sujeira = st.sidebar.slider("Selecione a quantidade de sujeira:", min_value=0, max_value=100,value=50,step=1)
     mancha = st.sidebar.slider("Selecione a quantidade de manchas:", min_value=0, max_value=100,value=50,step=1)
 

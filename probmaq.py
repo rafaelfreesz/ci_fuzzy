@@ -17,119 +17,62 @@ def defuzzify(groups,trigged_rules, method):
     return graph_y
 
 def build_graph_y(groups,trigged_groups):
-    graph = go.Figure()
-    x_mc = np.linspace(0,int(groups[6].b),int(groups[6].b)+1)
-    x_c = np.linspace(int(groups[7].a),int(groups[7].b),int(groups[7].b)+1)
-    x_m = np.linspace(int(groups[8].a),int(groups[8].b),int(groups[8].b)+1)
-    x_l = np.linspace(int(groups[9].a),int(groups[9].b),int(groups[8].b)+1)
-    x_ml = np.linspace(int(groups[10].a),int(groups[10].m),int(groups[10].m-groups[10].a)+1)
 
+    #Graficos variável de saída
+    graph = go.Figure()
+    
+    x_mc = np.linspace(0,int(groups[6].b),int(groups[6].b)+1)
     graph.add_trace(go.Scatter(x=x_mc, y=ut.array_apply(x_mc,groups[6].f), mode='lines', name=f"{groups[6].f_name}_{groups[6].f_spec}"))
+    
+    x_c = np.linspace(int(groups[7].a),int(groups[7].b),int(groups[7].b)+1)
     graph.add_trace(go.Scatter(x=x_c, y=ut.array_apply(x_c,groups[7].f), mode='lines', name=f"{groups[7].f_name}_{groups[7].f_spec}"))
+    
+    x_m = np.linspace(int(groups[8].a),int(groups[8].b),int(groups[8].b)+1)
     graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}"))
+    
+    x_l = np.linspace(int(groups[9].a),int(groups[9].b),int(groups[8].b)+1)
     graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}"))
+    
+    x_ml = np.linspace(int(groups[10].a),int(groups[10].m),int(groups[10].m-groups[10].a)+1)
     graph.add_trace(go.Scatter(x=x_ml, y=ut.array_apply(x_ml,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}"))
 
-    print(trigged_groups[0])
-    tg=None
+
+    #Gráficos de área para resultado
     for i in range(len(trigged_groups)):
+        tg = trigged_groups[i]
+        plot = True
+
         if trigged_groups[i].f_spec == "mc":
-            tg = trigged_groups[i]
-            break
-    
-    if tg is not None:
-        if tg.f_type != "tri_desc":
-            xs=np.linspace(0,tg.d,10*int(tg.d)+1)
+            if tg.f_type != "tri_desc":
+                xs=np.linspace(0,tg.d,10*int(tg.d)+1)
+            else:
+                xs = x_mc
+        elif trigged_groups[i].f_spec == "c":
+            if tg.f_type != "tri_full":
+                xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
+            else:
+                xs = x_c
+        elif trigged_groups[i].f_spec == "m":
+            if tg.f_type != "tri_full":
+                xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
+            else:
+                xs = x_m
+        elif trigged_groups[i].f_spec == "l":
+            if tg.f_type != "tri_full":
+                xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
+            else:
+                xs = x_l
+        elif trigged_groups[i].f_spec == "ml":
+            if tg.f_type != "tri_asc":
+                xs=np.linspace(int(tg.a),60,10*60+1)
+            else:
+                xs = x_ml
         else:
-            xs = x_mc
-        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=1))
+            plot = False
         
-    tg=None
-    for i in range(len(trigged_groups)):
-        if trigged_groups[i].f_spec == "c":
-            tg = trigged_groups[i]
-            break
-    
-    if tg is not None:
-        if tg.f_type != "tri_full":
-            xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
-        else:
-            xs = x_c
-        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=2))
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=i))
+       
 
-    tg=None
-    for i in range(len(trigged_groups)):
-        if trigged_groups[i].f_spec == "m":
-            tg = trigged_groups[i]
-            break
-    
-    if tg is not None:
-        if tg.f_type != "tri_full":
-            xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
-        else:
-            xs = x_m
-        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=3))
-    tg=None
-    for i in range(len(trigged_groups)):
-        if trigged_groups[i].f_spec == "l":
-            tg = trigged_groups[i]
-            break
-    
-    if tg is not None:
-        if tg.f_type != "tri_full":
-            xs=np.linspace(int(tg.a),int(tg.d),10*int(tg.d-tg.a)+1)
-        else:
-            xs = x_l
-        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=4))
-    tg=None
-    for i in range(len(trigged_groups)):
-        if trigged_groups[i].f_spec == "ml":
-            tg = trigged_groups[i]
-            break
-    
-    if tg is not None:
-        if tg.f_type != "tri_asc":
-            print(tg)
-            xs=np.linspace(int(tg.a),int(tg.b),10*int(tg.b-tg.a)+1)
-        else:
-            xs = x_ml
-        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=5))
-        
-
-    # for i in range(len(trigged_groups)):
-    #     xs=None
-    #     if(trigged_groups[i].f_spec == "mc"):
-    #         if trigged_groups[i].f_type != "tri_full":
-    #             xs=np.linspace(0,trigged_groups[i].d,int(trigged_groups[i].d)+1)
-    #         else:
-    #             xs = x_mc
-    #     elif(trigged_groups[i].f_spec == "c"):
-    #         if trigged_groups[i].f_type != "tri_full":
-    #             xs=np.linspace(int(trigged_groups[i].a),int(trigged_groups[i].d),int(trigged_groups[i].d-trigged_groups[i].a)+1)
-    #         else:
-    #             xs = x_c
-    #     elif(trigged_groups[i].f_spec == "m"):
-    #         if trigged_groups[i].f_type != "tri_full":
-    #             xs=np.linspace(int(trigged_groups[i].a),int(trigged_groups[i].d),int(trigged_groups[i].d-trigged_groups[i].a)+1)
-    #         else:
-    #             xs = x_m
-    #     elif(trigged_groups[i].f_spec == "l"):
-    #         print(trigged_groups[i])
-    #         if trigged_groups[i].f_type != "tri_full":
-    #             xs=np.linspace(int(trigged_groups[i].a),int(trigged_groups[i].d),int(trigged_groups[i].d-trigged_groups[i].a)+1)
-    #         else:
-    #             xs = x_l
-    #     elif(trigged_groups[i].f_spec == "ml"):
-    #         if trigged_groups[i].f_type != "tri_full":
-    #             xs=xs=np.linspace(int(trigged_groups[i].a),60,61-int(trigged_groups[i].a))
-    #         else:
-    #             xs = x_ml
-    #     else:
-    #         print("SUMB")
-        
-    #     if xs is not None:
-    #         print(trigged_groups[i])
-    #         graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,trigged_groups[i].f), mode='lines', name=f"y({trigged_groups[i].f_name}_{trigged_groups[i].f_spec})", stackgroup='one'))
     
     graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Saída")
     return graph
