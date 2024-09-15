@@ -4,6 +4,139 @@ import utils as ut
 import plotly.graph_objects as go
 import copy
 
+#Defuzzificação
+def defuzzify(groups,triggered_rules, method):
+
+    triggered_groups = calculate_mamdani(triggered_rules,groups)
+
+    graph_y = build_graph_y(groups,triggered_groups)
+    
+    
+    weighted_average = 0
+
+    res_str = ""
+    if method == 'Média Ponderada':
+        weighted_average = fl.defuzz_weighted_average(triggered_groups,triggered_rules)
+        res_str = f"O resultado com média ponderada é {'{0:.2f}'.format(weighted_average)}"
+    elif method == 'Centro de Gravidade - CoG':
+        #TODO implementar centro de gravidade
+        weighted_average = fl.defuzz_weighted_average(triggered_groups,triggered_rules)
+        res_str = f"O resultado com Centro de Gravidade - CoG é {'{0:.2f}'.format(weighted_average)}"
+    else:
+        res_str = "DUMB"
+    return graph_y, res_str
+
+def build_graph_y(groups,triggered_groups):
+
+    #Graficos variável de saída
+    graph = go.Figure()
+    
+    
+    x_mp = np.linspace(0.0,groups[9].d,(int(groups[9].d)+1)*1000)
+    graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}"))
+        
+    x_p = np.linspace(groups[10].a,groups[10].b,(int(groups[10].b)+1)*1000)
+    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}"))
+    
+    x_pp = np.linspace(groups[11].a,groups[11].b,(int(groups[11].b)+1)*1000)
+    graph.add_trace(go.Scatter(x=x_pp, y=ut.array_apply(x_pp,groups[11].f), mode='lines', name=f"{groups[11].f_name}_{groups[11].f_spec}"))
+    
+    x_m = np.linspace(groups[12].a,groups[12].b,(int(groups[12].b)+1)*1000)
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[12].f), mode='lines', name=f"{groups[12].f_name}_{groups[12].f_spec}"))
+    
+    x_pg = np.linspace(groups[13].a,groups[13].b,(int(groups[13].b)+1)*1000)
+    graph.add_trace(go.Scatter(x=x_pg, y=ut.array_apply(x_pg,groups[13].f), mode='lines', name=f"{groups[13].f_name}_{groups[13].f_spec}"))
+    
+    x_g = np.linspace(groups[14].a,groups[14].b,(int(groups[14].b-groups[14].a)+1)*1000)
+    graph.add_trace(go.Scatter(x=x_g, y=ut.array_apply(x_g,groups[14].f), mode='lines', name=f"{groups[14].f_name}_{groups[14].f_spec}"))
+    
+    x_mg = np.linspace(groups[15].a,1,1000)
+    graph.add_trace(go.Scatter(x=x_mg, y=ut.array_apply(x_mg,groups[15].f), mode='lines', name=f"{groups[15].f_name}_{groups[15].f_spec}"))
+
+
+    #Gráficos de área para resultado
+    for i in range(len(triggered_groups)):
+        tg = triggered_groups[i]
+        plot = True
+
+        if triggered_groups[i].f_spec == "mp":
+            xs = x_mp
+        elif triggered_groups[i].f_spec == "p":
+            if tg.f_type != "tri_full":
+                xs=np.linspace(tg.a,tg.d,1000*int(tg.d-tg.a+1))
+            else:
+                xs = x_p
+        elif triggered_groups[i].f_spec == "pp":
+            if tg.f_type != "tri_full":
+                xs=np.linspace(tg.a,tg.d,1000*int(tg.d-tg.a+1))
+            else:
+                xs = x_pp
+        elif triggered_groups[i].f_spec == "m":
+            if tg.f_type != "tri_full":
+                xs=np.linspace(tg.a,tg.d,1000*int(tg.d-tg.a+1))
+            else:
+                xs = x_m
+        elif triggered_groups[i].f_spec == "pg":
+            if tg.f_type != "tri_full":
+                xs=np.linspace(tg.a,tg.d,1000*int(tg.d-tg.a+1))
+            else:
+                xs = x_pg
+        elif triggered_groups[i].f_spec == "g":
+            if tg.f_type != "tri_full":
+                xs=np.linspace(tg.a,tg.d,1000*int(tg.d-tg.a+1))
+            else:
+                xs = x_g
+        elif triggered_groups[i].f_spec == "mg":
+            xs = x_mg
+        else:
+            plot = False
+            print("DUMB")
+        
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=i))
+        
+    
+    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Saída")
+    return graph
+
+
+#Calcula e retorna as regioes conforme o metodo de Mamdani
+def calculate_mamdani(triggered_rules,groups):
+    triggered_groups = []
+    group_rule_tuples = []
+    for i in range(len(triggered_rules)):
+        j=-1
+        group = groups[j]
+
+        while group.f_spec != triggered_rules[i].vars[-1]:
+            j=j-1
+            group = groups[j]
+
+        triggered_group = copy.deepcopy(group)
+        group_rule_tuples.append((triggered_group,triggered_rules[i]))
+        
+        triggered_groups.append(triggered_group)
+
+    #Modificando a área do grafico em função das regras disparadas
+    for i in range(len(group_rule_tuples)):
+        if group_rule_tuples[i][1].values[-1] < 1:
+            if group_rule_tuples[i][0].f_type == "tri_asc":
+               fl.ff.reverse_tri_asc(group_rule_tuples[i][0],group_rule_tuples[i][1])
+            elif group_rule_tuples[i][0].f_type == "tri_desc":
+               fl.ff.reverse_tri_desc(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "tri_full":
+               fl.ff.reverse_tri_full(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "trap_desc":
+               fl.ff.reverse_trap_desc(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "trap_asc":
+               fl.ff.reverse_trap_asc(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "trap_full":
+               fl.ff.reverse_trap_full(group_rule_tuples[i][0],group_rule_tuples[i][1])
+            else:
+                print("DUMB")
+            
+    return triggered_groups
+
+
 def fuzzify(tempo, fator, funcionarios):
     groups = fl.prepare_fuzz("02_autoparts/autoparts_x.csv")
 
@@ -42,7 +175,7 @@ def build_graph_funcionarios(funcionarios,groups):
     graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}"))
     graph.add_vline(x=funcionarios, line_width=3, line_dash="dash",line_color="green")
 
-    graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Número de Funcionários")
+    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Número de Funcionários")
     return graph
 
 #Constroi e seta atributos do grafico de tempo
@@ -57,7 +190,7 @@ def build_graph_tempo(tempo,groups):
     graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[2].f), mode='lines', name=f"{groups[2].f_name}_{groups[2].f_spec}"))
     graph.add_vline(x=tempo, line_width=3, line_dash="dash",line_color="green")
 
-    graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Tempo Médio de Espera")
+    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Tempo Médio de Espera")
     return graph
 
 #Constroi e seta atributos do grafico de fator
@@ -72,7 +205,7 @@ def build_graph_fator(fator,groups):
     graph.add_trace(go.Scatter(x=x_a, y=ut.array_apply(x_a,groups[5].f), mode='lines', name=f"{groups[5].f_name}_{groups[5].f_spec}"))
     graph.add_vline(x=fator, line_width=3, line_dash="dash",line_color="green")
 
-    graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Fator de Utilização")
+    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Fator de Utilização")
     return graph
 
 #Retorna string para imprimir resultado da fuzzificação do Número de Funcionários
@@ -88,32 +221,38 @@ def get_tempo_result_string(groups,tempo):
     return f"Tempo: x = {'{0:.3f}'.format(tempo)}  \n Muito Pequeno (mp): {'{0:.3f}'.format(groups[0].f(tempo))}  \n Pequeno (p): {'{0:.3f}'.format(groups[1].f(tempo))}  \n Médio (m): {'{0:.3f}'.format(groups[2].f(tempo))}"
 
 #Calcula e retorna os resultados da inferência
-def infer(groups,tempo,fator,funcionarios):
+def infer(groups,tempo,funcionarios):
     rules = fl.prepare_infer_assoc_mem("02_autoparts/autoparts_rules.csv")
-
+    
     val_tempo = [groups[0].f(tempo),groups[1].f(tempo),groups[2].f(tempo)]
-    val_fator = [groups[3].f(fator),groups[4].f(fator),groups[5].f(fator)]
-
+    val_fator = [groups[3].f(funcionarios),groups[4].f(funcionarios),groups[5].f(funcionarios)]
+    
+    #R1 - Se g e mp entao mp
     rules[0].values[0] = val_tempo[0]
     rules[0].values[1] = val_fator[0]
     rules[0].values[2] = min(rules[0].values[0], rules[0].values[1])
     
+    #R2 - Se g e p entao p
     rules[1].values[0] = val_tempo[0]
     rules[1].values[1] = val_fator[1]
     rules[1].values[2] = min(rules[1].values[0], rules[1].values[1])
 
+    #R3 - Se g e m entao mp
     rules[2].values[0] = val_tempo[0]
     rules[2].values[1] = val_fator[2]
     rules[2].values[2] = min(rules[2].values[0], rules[2].values[1])
 
+    #R4 - Se m e mp entao pg
     rules[3].values[0] = val_tempo[1]
     rules[3].values[1] = val_fator[0]
     rules[3].values[2] = min(rules[3].values[0], rules[3].values[1])
 
+    #R5 - Se m e p entao pp
     rules[4].values[0] = val_tempo[1]
     rules[4].values[1] = val_fator[1]
     rules[4].values[2] = min(rules[4].values[0], rules[4].values[1])
 
+    #R6 - Se m e m entao p
     rules[5].values[0] = val_tempo[1]
     rules[5].values[1] = val_fator[2]
     rules[5].values[2] = min(rules[5].values[0], rules[5].values[1])
@@ -122,10 +261,12 @@ def infer(groups,tempo,fator,funcionarios):
     rules[6].values[1] = val_fator[0]
     rules[6].values[2] = min(rules[6].values[0], rules[6].values[1])
 
+    #R8 - Se p e p entao g
     rules[7].values[0] = val_tempo[2]
     rules[7].values[1] = val_fator[1]
     rules[7].values[2] = min(rules[7].values[0], rules[7].values[1])
 
+    #R9 - Se p e m entao m
     rules[8].values[0] = val_tempo[2]
     rules[8].values[1] = val_fator[2]
     rules[8].values[2] = min(rules[8].values[0], rules[8].values[1])
@@ -150,13 +291,9 @@ def infer(groups,tempo,fator,funcionarios):
 def get_rules_max_min(rules):
     rules_sel=[None,None,None,None,None,None,None]
 
-    # for i in range(len(rules)):
-    #     print(rules[i])
-
     for i in range(len(rules)):
         rule = rules[i]
         index = -1
-        # print(rule)
         if rule.vars[-1] == "mp":
             index = 0
         elif rule.vars[-1] == "p":

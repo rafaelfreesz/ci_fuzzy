@@ -17,11 +17,11 @@ def defuzzify(groups,triggered_rules, method):
     res_str = ""
     if method == 'Média Ponderada':
         weighted_average = fl.defuzz_weighted_average(triggered_groups,triggered_rules)
-        res_str = f"O resultado com média ponderada é {'{0:.2f}'.format(weighted_average)}"
+        res_str = f"O resultado com média ponderada é {'{0:.2f}'.format(weighted_average)} minutos"
     elif method == 'Centro de Gravidade - CoG':
         #TODO implementar centro de gravidade
         weighted_average = fl.defuzz_weighted_average(triggered_groups,triggered_rules)
-        res_str = f"O resultado com Centro de Gravidade - CoG é {'{0:.2f}'.format(weighted_average)}"
+        res_str = f"O resultado com Centro de Gravidade - CoG é {'{0:.2f}'.format(weighted_average)} minutos"
     else:
         res_str = "DUMB"
     return graph_y, res_str
@@ -41,7 +41,7 @@ def build_graph_y(groups,triggered_groups):
     x_m = np.linspace(int(groups[8].a),int(groups[8].b),int(groups[8].b)+1)
     graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}"))
     
-    x_l = np.linspace(int(groups[9].a),int(groups[9].b),int(groups[8].b)+1)
+    x_l = np.linspace(int(groups[9].a),int(groups[9].b),int(groups[9].b)+1)
     graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}"))
     
     x_ml = np.linspace(int(groups[10].a),int(groups[10].m),int(groups[10].m-groups[10].a)+1)
@@ -85,7 +85,7 @@ def build_graph_y(groups,triggered_groups):
        
 
     
-    graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Saída")
+    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Saída")
     return graph
 
 #Calcula e retorna as regioes conforme o metodo de Mamdani
@@ -247,7 +247,7 @@ def build_graph_sujeira(sujeira,groups):
     graph.add_trace(go.Scatter(x=x_gs, y=ut.array_apply(x_gs,groups[2].f), mode='lines', name=f"{groups[2].f_name}_{groups[2].f_spec}"))
     graph.add_vline(x=sujeira, line_width=3, line_dash="dash",line_color="green")
 
-    graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Quantidade de Sujeira")
+    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Quantidade de Sujeira")
     return graph
 
 #Retorna string para imprimir resultado da fuzzificação da quantidade de sujeira
@@ -266,7 +266,7 @@ def build_graph_mancha(mancha,groups):
     graph.add_trace(go.Scatter(x=x_gm, y=ut.array_apply(x_gm,groups[5].f), mode='lines', name=f"{groups[5].f_name}_{groups[6].f_spec}"))
     graph.add_vline(x=mancha, line_width=3, line_dash="dash",line_color="green")
 
-    graph.update_layout(width=480, height = 180, margin = dict(t=20,b=0), title = "Quantidade de Mancha")
+    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Quantidade de Mancha")
     return graph
 
 #Retorna string para imprimir resultado da fuzzificação da quantidade de sujeira
