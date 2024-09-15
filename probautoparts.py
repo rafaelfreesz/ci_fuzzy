@@ -36,9 +36,7 @@ def build_graph_funcionarios(funcionarios,groups):
     x_mp = np.linspace(0.0,0.6,int(0.6*100.0))
     x_p = np.linspace(0.4,0.8,int((0.8-0.4)*10000.0))
     x_m = np.linspace(0.6,1.0,int((1.0-0.6)*1000.0))
-    print(groups[6])
-    print(groups[7])
-    print(groups[8])
+    
     graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[6].f), mode='lines', name=f"{groups[6].f_name}_{groups[6].f_spec}"))
     graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[7].f), mode='lines', name=f"{groups[7].f_name}_{groups[7].f_spec}"))
     graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}"))
@@ -88,3 +86,101 @@ def get_fator_result_string(groups,fator):
 #Retorna string para imprimir resultado da fuzzificação do tempo de espera
 def get_tempo_result_string(groups,tempo):
     return f"Tempo: x = {'{0:.3f}'.format(tempo)}  \n Muito Pequeno (mp): {'{0:.3f}'.format(groups[0].f(tempo))}  \n Pequeno (p): {'{0:.3f}'.format(groups[1].f(tempo))}  \n Médio (m): {'{0:.3f}'.format(groups[2].f(tempo))}"
+
+#Calcula e retorna os resultados da inferência
+def infer(groups,tempo,fator,funcionarios):
+    rules = fl.prepare_infer_assoc_mem("02_autoparts/autoparts_rules.csv")
+
+    val_tempo = [groups[0].f(tempo),groups[1].f(tempo),groups[2].f(tempo)]
+    val_fator = [groups[3].f(fator),groups[4].f(fator),groups[5].f(fator)]
+
+    rules[0].values[0] = val_tempo[0]
+    rules[0].values[1] = val_fator[0]
+    rules[0].values[2] = min(rules[0].values[0], rules[0].values[1])
+    
+    rules[1].values[0] = val_tempo[0]
+    rules[1].values[1] = val_fator[1]
+    rules[1].values[2] = min(rules[1].values[0], rules[1].values[1])
+
+    rules[2].values[0] = val_tempo[0]
+    rules[2].values[1] = val_fator[2]
+    rules[2].values[2] = min(rules[2].values[0], rules[2].values[1])
+
+    rules[3].values[0] = val_tempo[1]
+    rules[3].values[1] = val_fator[0]
+    rules[3].values[2] = min(rules[3].values[0], rules[3].values[1])
+
+    rules[4].values[0] = val_tempo[1]
+    rules[4].values[1] = val_fator[1]
+    rules[4].values[2] = min(rules[4].values[0], rules[4].values[1])
+
+    rules[5].values[0] = val_tempo[1]
+    rules[5].values[1] = val_fator[2]
+    rules[5].values[2] = min(rules[5].values[0], rules[5].values[1])
+
+    rules[6].values[0] = val_tempo[2]
+    rules[6].values[1] = val_fator[0]
+    rules[6].values[2] = min(rules[6].values[0], rules[6].values[1])
+
+    rules[7].values[0] = val_tempo[2]
+    rules[7].values[1] = val_fator[1]
+    rules[7].values[2] = min(rules[7].values[0], rules[7].values[1])
+
+    rules[8].values[0] = val_tempo[2]
+    rules[8].values[1] = val_fator[2]
+    rules[8].values[2] = min(rules[8].values[0], rules[8].values[1])
+
+    str_rules = f""
+
+    for i in range(len(rules)):
+        if rules[i].values[2] == 0:
+            str_rules = str_rules + f"-  :gray[~~{rules[i]}~~]  \n"
+        else:
+            str_rules = str_rules + f"- {rules[i]}  \n"
+
+    triggered_rules = get_rules_max_min(rules)
+    str_triggered_rules = ""
+    for i in range(len(triggered_rules)):
+        str_triggered_rules = str_triggered_rules + f"- {triggered_rules[i]}  \n"
+
+
+    return rules, str_rules, triggered_rules, str_triggered_rules
+
+#Cria um subgrupo de regras disparadas de acordo com o critério Max-Min
+def get_rules_max_min(rules):
+    rules_sel=[None,None,None,None,None,None,None]
+
+    # for i in range(len(rules)):
+    #     print(rules[i])
+
+    for i in range(len(rules)):
+        rule = rules[i]
+        index = -1
+        # print(rule)
+        if rule.vars[-1] == "mp":
+            index = 0
+        elif rule.vars[-1] == "p":
+            index = 1
+        elif rule.vars[-1] == "pp":
+            index = 2
+        elif rule.vars[-1] == "m":
+            index = 3
+        elif rule.vars[-1] == "pg":
+            index = 4
+        elif rule.vars[-1] == "g":
+            index = 5
+        elif rule.vars[-1] == "mg":
+            index = 6
+        else:
+            print("DUMB "+str(rule.vars))
+        
+        if rules_sel[index] is None or rules_sel[index].values[-1] < rule.values[-1]:
+            rules_sel[index] = rules[i]
+
+    rules_max_min=[]
+
+    for i in range(len(rules_sel)):
+        if rules_sel[i] is not None and rules_sel[i].values[-1] > 0.0:
+            rules_max_min.append(rules_sel[i])
+    
+    return rules_max_min

@@ -40,7 +40,7 @@ def prepare_infer_assoc_mem(filename):
 
     rules = []
     index = 1
-    for i in range(len(matriz)-1):
+    for i in range(1,len(matriz)-1):
         for j in range(1,len(matriz[i])):
             # print(j)
             rule = fe.Rule()

@@ -24,6 +24,11 @@ def run_autoparts():
     st.write(strs[2])
 
     st.write("### 2. Inferência")
+
+    rules, str_rules, triggered_rules, str_triggered_rules = p_auto.infer(groups,tempo,fator,funcionarios)
+    
+    st.write(str_rules + "\n Regras selecionadas de acordo com critério MAX-MIN:\n" + str_triggered_rules)
+
     st.write("### 3. Defuzzificação")
 
 def run_wash():

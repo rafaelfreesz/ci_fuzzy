@@ -55,4 +55,4 @@ class Rule:
         self.values=[]
     
     def __str__(self) -> str:
-       return f"R{self.index} - Se {self.vars[0]}({self.values[0]}) e {self.vars[1]}({self.values[1]}) entao {self.vars[2]}({self.values[2]})" 
+       return f"R{self.index} - Se {self.vars[0]}({'{0:.3f}'.format(self.values[0])}) e {self.vars[1]}({'{0:.3f}'.format(self.values[1])}) entao {self.vars[2]}({'{0:.3f}'.format(self.values[2])})" 
