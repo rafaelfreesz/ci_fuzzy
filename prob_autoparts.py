@@ -33,25 +33,25 @@ def build_graph_y(groups,triggered_groups):
     
     
     x_mp = np.linspace(0.0,groups[9].d,(int(groups[9].d)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}", line=dict(color="rgb(255,54,54)")))
         
     x_p = np.linspace(groups[10].a,groups[10].b,(int(groups[10].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}", line=dict(color="rgb(61,54,255)")))
     
     x_pp = np.linspace(groups[11].a,groups[11].b,(int(groups[11].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_pp, y=ut.array_apply(x_pp,groups[11].f), mode='lines', name=f"{groups[11].f_name}_{groups[11].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_pp, y=ut.array_apply(x_pp,groups[11].f), mode='lines', name=f"{groups[11].f_name}_{groups[11].f_spec}", line=dict(color="rgb(255,110,251)")))
     
     x_m = np.linspace(groups[12].a,groups[12].b,(int(groups[12].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[12].f), mode='lines', name=f"{groups[12].f_name}_{groups[12].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[12].f), mode='lines', name=f"{groups[12].f_name}_{groups[12].f_spec}", line=dict(color="rgb(255,241,110)")))
     
     x_pg = np.linspace(groups[13].a,groups[13].b,(int(groups[13].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_pg, y=ut.array_apply(x_pg,groups[13].f), mode='lines', name=f"{groups[13].f_name}_{groups[13].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_pg, y=ut.array_apply(x_pg,groups[13].f), mode='lines', name=f"{groups[13].f_name}_{groups[13].f_spec}", line=dict(color="rgb(96,236,75)")))
     
     x_g = np.linspace(groups[14].a,groups[14].b,(int(groups[14].b-groups[14].a)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_g, y=ut.array_apply(x_g,groups[14].f), mode='lines', name=f"{groups[14].f_name}_{groups[14].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_g, y=ut.array_apply(x_g,groups[14].f), mode='lines', name=f"{groups[14].f_name}_{groups[14].f_spec}", line=dict(color="rgb(75,231,236)")))
     
     x_mg = np.linspace(groups[15].a,1,1000)
-    graph.add_trace(go.Scatter(x=x_mg, y=ut.array_apply(x_mg,groups[15].f), mode='lines', name=f"{groups[15].f_name}_{groups[15].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_mg, y=ut.array_apply(x_mg,groups[15].f), mode='lines', name=f"{groups[15].f_name}_{groups[15].f_spec}", line=dict(color="rgb(218,160,0)")))
 
 
     #Gráficos de área para resultado
@@ -92,7 +92,7 @@ def build_graph_y(groups,triggered_groups):
             plot = False
             print("DUMB")
         
-        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=i))
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=i, fillcolor=fl.define_color(tg,groups,9,True), line=dict(color=fl.define_color(tg,groups,9,False))))
         
     
     graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Saída")

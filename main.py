@@ -1,7 +1,7 @@
 import streamlit as st
 import plotly.graph_objects as go
 import prob_wash as p_wash
-import probautoparts as p_auto
+import prob_autoparts as p_auto
 import prob_overtaking as p_over
 import home_data as hd
 

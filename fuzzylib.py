@@ -3,8 +3,8 @@ import fuzzyfunctions as ff
 import fuzzyentities as fe
 
 def define_color(tg,groups,i_groups, is_area):
-    color_area=["rgba(255,54,54,0.5)","rgba(61,54,255,0.5)","rgba(255,110,251,0.5)","rgba(255,241,110,0.5)","rgba(96,236,75,0.5)"]
-    color_line=["rgb(255,54,54)","rgb(61,54,255)","rgb(255,110,251)","rgb(255,241,110)","rgb(96,236,75)"]
+    color_area=["rgba(255,54,54,0.5)","rgba(61,54,255,0.5)","rgba(255,110,251,0.5)","rgba(255,241,110,0.5)","rgba(96,236,75,0.5)","rgba(75,231,236,0.5)","rgba(218,160,0,0.5)"]
+    color_line=["rgb(255,54,54)","rgb(61,54,255)","rgb(255,110,251)","rgb(255,241,110)","rgb(96,236,75)","rgb(75,231,236)","rgb(218,160,0)"]
 
     i=0
     print(len(groups))
