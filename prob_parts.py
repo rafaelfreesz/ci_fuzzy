@@ -20,7 +20,7 @@ def defuzzify(groups,triggered_rules, method):
         res_str = f"O resultado com média ponderada é {'{0:.2f}'.format(weighted_average)}"
     elif method == 'Centro de Gravidade - CoG':
         #TODO implementar centro de gravidade
-        weighted_average = fl.defuzz_weighted_average(triggered_groups,triggered_rules)
+        weighted_average = fl.defuzz_center_of_gravity(0.0,1.0,triggered_groups,triggered_rules)
         res_str = f"O resultado com Centro de Gravidade - CoG é {'{0:.2f}'.format(weighted_average)}"
     else:
         res_str = "DUMB"

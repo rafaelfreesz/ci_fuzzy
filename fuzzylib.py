@@ -32,7 +32,28 @@ def calculate_midle_point(group):
         return group.a + (group.m - group.a)/2
     elif group.f_type == "tri_full":
         return group.m + (group.b - group.m)/2
-    
+
+
+def defuzz_center_of_gravity(inf, sup, triggered_groups,triggered_rules):
+    w_c=-1
+    x_i = float(inf)
+    delta = float(sup-inf)/100000
+    sum_wc=0.0
+    sum_wc_xi=0.0
+    print(inf, sup, delta)
+    while x_i < sup:
+        for k in triggered_groups:
+            
+            if w_c == -1 or k.f(x_i) > w_c:
+                w_c = k.f(x_i)
+
+        sum_wc = sum_wc + w_c
+        sum_wc_xi = sum_wc_xi + w_c*x_i
+        x_i = x_i + delta
+        w_c=-1
+    return sum_wc_xi/sum_wc
+
+
 #Calcula a média ponderada do ponto médio de cada forma
 def defuzz_weighted_average(triggered_groups,triggered_rules):
     sum = 0
