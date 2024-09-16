@@ -6,8 +6,16 @@ import prob_overtaking as p_over
 import home_data as hd
 
 def run_home():
+
+    text = hd.build_text("./home_data/home_text.md")
+    
+    st.write(text)
+    
     dvu_graph = hd.build_speed_distance_graph()
     st.plotly_chart(dvu_graph)
+    
+    text = hd.build_text("./home_data/home_text_2.md")
+    st.write(text)
 
 def run_overtaking():
     velocidade = st.sidebar.slider("Selecione a velocidade(km/h):", min_value=30.0, max_value=120.0,value=(30+120)/2,step=1.0)

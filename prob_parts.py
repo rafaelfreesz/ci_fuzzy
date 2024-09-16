@@ -45,10 +45,10 @@ def build_graph_y(groups,triggered_groups):
     graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[12].f), mode='lines', name="Médio", line=dict(color="rgb(255,241,110)")))
     
     x_pg = np.linspace(groups[13].a,groups[13].b,(int(groups[13].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_pg, y=ut.array_apply(x_pg,groups[13].f), mode='lines', name="Grande", line=dict(color="rgb(96,236,75)")))
+    graph.add_trace(go.Scatter(x=x_pg, y=ut.array_apply(x_pg,groups[13].f), mode='lines', name="Pouco Grande", line=dict(color="rgb(96,236,75)")))
     
     x_g = np.linspace(groups[14].a,groups[14].b,(int(groups[14].b-groups[14].a)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_g, y=ut.array_apply(x_g,groups[14].f), mode='lines', name="Pouco Grande", line=dict(color="rgb(75,231,236)")))
+    graph.add_trace(go.Scatter(x=x_g, y=ut.array_apply(x_g,groups[14].f), mode='lines', name="Grande", line=dict(color="rgb(75,231,236)")))
     
     x_mg = np.linspace(groups[15].a,1,1000)
     graph.add_trace(go.Scatter(x=x_mg, y=ut.array_apply(x_mg,groups[15].f), mode='lines', name="Muito Grande", line=dict(color="rgb(218,160,0)")))
