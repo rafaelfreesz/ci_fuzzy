@@ -31,6 +31,14 @@ def run_overtaking():
     st.write(strs[1])
     
     st.write("### 2. Inferência")
+
+    st.write("**Se Velocidade(km/h) e Distância(m) então Ultrapassagem(n)**")
+    rules, str_rules, triggered_rules, str_triggered_rules = p_over.infer(groups,velocidade, distancia)
+    
+    st.write(str_rules + "\n Regras selecionadas de acordo com critério MAX-MIN:\n" + str_triggered_rules)
+
+    
+
     st.write("### 3. Defuzzificação")
 
 def run_autoparts():
