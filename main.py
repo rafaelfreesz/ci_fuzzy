@@ -37,9 +37,14 @@ def run_overtaking():
     
     st.write(str_rules + "\n Regras selecionadas de acordo com critério MAX-MIN:\n" + str_triggered_rules)
 
-    
+
 
     st.write("### 3. Defuzzificação")
+
+    graph_y, res_str = p_over.defuzzify(groups,triggered_rules, metodo_defuzz)
+    st.plotly_chart(graph_y)
+    st.write(res_str)
+    st.write("FIM")
 
 def run_autoparts():
     tempo = st.sidebar.slider("Selecione o tempo de espera(m):", min_value=0.0, max_value=0.7,value=0.7/2,step=0.7/100)

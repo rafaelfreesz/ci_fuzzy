@@ -157,3 +157,122 @@ def get_rules_max_min(rules):
             rules_max_min.append(rules_sel[i])
     
     return rules_max_min
+
+#Defuzzificação
+def defuzzify(groups,triggered_rules, method):
+
+    triggered_groups = calculate_mamdani(triggered_rules,groups)
+
+    graph_y = build_graph_y(groups,triggered_groups)
+    
+    
+    weighted_average = 0
+
+    res_str = ""
+    if method == 'Média Ponderada':
+        weighted_average = fl.defuzz_weighted_average(triggered_groups,triggered_rules)
+        res_str = f"O resultado com média ponderada é {'{0:.2f}'.format(weighted_average)}"
+    elif method == 'Centro de Gravidade - CoG':
+        #TODO implementar centro de gravidade
+        weighted_average = fl.defuzz_weighted_average(triggered_groups,triggered_rules)
+        res_str = f"O resultado com Centro de Gravidade - CoG é {'{0:.2f}'.format(weighted_average)}"
+    else:
+        res_str = "DUMB"
+    return graph_y, res_str
+
+def build_graph_y(groups,triggered_groups):
+
+    #Graficos variável de saída
+    graph = go.Figure()
+    print("UUUUUUUUUUUU")
+    for g in groups:
+        print(g)
+    
+    x_rm = np.linspace(0.0,groups[6].b,(int(groups[6].b)+1)*1000)
+    graph.add_trace(go.Scatter(x=x_rm, y=ut.array_apply(x_rm,groups[6].f), mode='lines', name=f"{groups[6].f_name}_{groups[6].f_spec}"))
+        
+    x_s = np.linspace(groups[7].a,groups[7].b,(int(groups[7].b)+1)*1000)
+    graph.add_trace(go.Scatter(x=x_s, y=ut.array_apply(x_s,groups[7].f), mode='lines', name=f"{groups[7].f_name}_{groups[7].f_spec}"))
+    
+    x_a = np.linspace(groups[8].a,groups[8].b,(int(groups[8].b)+1)*1000)
+    graph.add_trace(go.Scatter(x=x_a, y=ut.array_apply(x_a,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}"))
+    
+    x_p = np.linspace(groups[9].a,groups[9].m,(int(groups[9].m)+1)*1000)
+    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}"))
+    
+    print("AAAAAAAAAAAAAAAAA")
+    for r in triggered_groups:
+        print(r)
+
+    #Gráficos de área para resultado
+    for i in range(len(triggered_groups)):
+        tg = triggered_groups[i]
+        plot = True
+    
+        if triggered_groups[i].f_spec == "rm":
+            if tg.f_type != "tri_desc":
+                xs=np.linspace(0,tg.d,100*int(tg.d+1))
+            else:
+                xs = x_p
+        elif triggered_groups[i].f_spec == "s":
+            if tg.f_type != "tri_full":
+                xs=np.linspace(tg.a,tg.d,100*int(tg.d-tg.a+1))
+            else:
+                xs = x_p
+        elif triggered_groups[i].f_spec == "a":
+            if tg.f_type != "tri_full":
+                xs=np.linspace(tg.a,tg.d,100*int(tg.d-tg.a+1))
+            else:
+                xs = x_a
+        elif triggered_groups[i].f_spec == "p":
+            if tg.f_type != "tri_asc":
+                xs=np.linspace(tg.a,100,100*int(100-tg.a+1))
+            else:
+                xs = x_p
+        else:
+            plot = False
+            print("DUMB")
+        
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=i))
+        
+    
+    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Saída")
+    return graph
+
+
+#Calcula e retorna as regioes conforme o metodo de Mamdani
+def calculate_mamdani(triggered_rules,groups):
+    triggered_groups = []
+    group_rule_tuples = []
+    for i in range(len(triggered_rules)):
+        j=-1
+        group = groups[j]
+
+        while group.f_spec != triggered_rules[i].vars[-1]:
+            j=j-1
+            group = groups[j]
+
+        triggered_group = copy.deepcopy(group)
+        group_rule_tuples.append((triggered_group,triggered_rules[i]))
+        
+        triggered_groups.append(triggered_group)
+
+    #Modificando a área do grafico em função das regras disparadas
+    for i in range(len(group_rule_tuples)):
+        if group_rule_tuples[i][1].values[-1] < 1:
+            if group_rule_tuples[i][0].f_type == "tri_asc":
+               fl.ff.reverse_tri_asc(group_rule_tuples[i][0],group_rule_tuples[i][1])
+            elif group_rule_tuples[i][0].f_type == "tri_desc":
+               fl.ff.reverse_tri_desc(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "tri_full":
+               fl.ff.reverse_tri_full(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "trap_desc":
+               fl.ff.reverse_trap_desc(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "trap_asc":
+               fl.ff.reverse_trap_asc(group_rule_tuples[i][0],group_rule_tuples[i][1])  
+            elif group_rule_tuples[i][0].f_type == "trap_full":
+               fl.ff.reverse_trap_full(group_rule_tuples[i][0],group_rule_tuples[i][1])
+            else:
+                print("DUMB")
+            
+    return triggered_groups

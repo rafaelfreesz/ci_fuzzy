@@ -5,7 +5,7 @@ x,velocidade,a,tri_asc,65,,,,120
 x,dvu,c,tri_desc,,438,,,180
 x,dvu,m,tri_full,263,800,,,600
 x,dvu,l,tri_asc,438,,,,800
-y,ultrapassagem,m,tri_desc,
-y,ultrapassagem,s,tri_full,
-y,ultrapassagem,a,tri_full,
-y,ultrapassagem,p,tri_asc,
+y,ultrapassagem,rm,tri_desc,,40,,,0
+y,ultrapassagem,s,tri_full,15,65,,,45
+y,ultrapassagem,a,tri_full,40,80,,,60
+y,ultrapassagem,p,tri_asc,65,,,,100
