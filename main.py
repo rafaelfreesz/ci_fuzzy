@@ -1,12 +1,12 @@
 import streamlit as st
 import plotly.graph_objects as go
-import probwash as p_wash
+import prob_wash as p_wash
 import probautoparts as p_auto
 import prob_overtaking as p_over
 import home_data as hd
 
 def run_home():
-    dvu_graph = hd.build_speed_distance_graph();
+    dvu_graph = hd.build_speed_distance_graph()
     st.plotly_chart(dvu_graph)
 
 def run_overtaking():

@@ -2,6 +2,24 @@ import pandas as pd
 import fuzzyfunctions as ff
 import fuzzyentities as fe
 
+def define_color(tg,groups,i_groups, is_area):
+    color_area=["rgba(255,54,54,0.5)","rgba(61,54,255,0.5)","rgba(255,110,251,0.5)","rgba(255,241,110,0.5)","rgba(96,236,75,0.5)"]
+    color_line=["rgb(255,54,54)","rgb(61,54,255)","rgb(255,110,251)","rgb(255,241,110)","rgb(96,236,75)"]
+
+    i=0
+    print(len(groups))
+
+    while tg.f_spec != groups[i_groups].f_spec:
+        print(tg.f_spec,groups[i_groups].f_spec)
+        i = i+1
+        i_groups = i_groups + 1
+
+    if is_area:
+        return color_area[i]
+    else:
+        return color_line[i]
+        
+    
 #Calcula o ponto medio de uma area
 def calculate_midle_point(group):
     if group.f_type == "trap_full":

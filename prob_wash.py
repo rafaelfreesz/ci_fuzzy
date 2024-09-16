@@ -31,23 +31,22 @@ def build_graph_y(groups,triggered_groups):
 
     #Graficos variável de saída
     graph = go.Figure()
-    
+
     x_mc = np.linspace(0,int(groups[6].b),int(groups[6].b)+1)
-    graph.add_trace(go.Scatter(x=x_mc, y=ut.array_apply(x_mc,groups[6].f), mode='lines', name=f"{groups[6].f_name}_{groups[6].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_mc, y=ut.array_apply(x_mc,groups[6].f), mode='lines', name=f"{groups[6].f_name}_{groups[6].f_spec}", line=dict(color="rgb(255,54,54)")))
     
     x_c = np.linspace(int(groups[7].a),int(groups[7].b),int(groups[7].b)+1)
-    graph.add_trace(go.Scatter(x=x_c, y=ut.array_apply(x_c,groups[7].f), mode='lines', name=f"{groups[7].f_name}_{groups[7].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_c, y=ut.array_apply(x_c,groups[7].f), mode='lines', name=f"{groups[7].f_name}_{groups[7].f_spec}", line=dict(color="rgb(61,54,255)")))
     
     x_m = np.linspace(int(groups[8].a),int(groups[8].b),int(groups[8].b)+1)
-    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}", line=dict(color="rgb(255,110,251)")))
     
     x_l = np.linspace(int(groups[9].a),int(groups[9].b),int(groups[9].b)+1)
-    graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}", line=dict(color="rgb(255,241,110)")))
     
     x_ml = np.linspace(int(groups[10].a),int(groups[10].m),int(groups[10].m-groups[10].a)+1)
-    graph.add_trace(go.Scatter(x=x_ml, y=ut.array_apply(x_ml,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}"))
-
-
+    graph.add_trace(go.Scatter(x=x_ml, y=ut.array_apply(x_ml,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}", line=dict(color="rgb(96,236,75)")))
+   
     #Gráficos de área para resultado
     for i in range(len(triggered_groups)):
         tg = triggered_groups[i]
@@ -81,9 +80,9 @@ def build_graph_y(groups,triggered_groups):
         else:
             plot = False
         
-        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=i))
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=i, fillcolor=fl.define_color(tg,groups,6,True), line=dict(color=fl.define_color(tg,groups,6,False))))
        
-
+        
     
     graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Saída")
     return graph
