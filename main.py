@@ -26,6 +26,10 @@ def run_overtaking():
     st.plotly_chart(graphs[0])
     st.write(strs[0])
     
+    #Imprimindo Gráfico de Distância
+    st.plotly_chart(graphs[1])
+    st.write(strs[1])
+    
     st.write("### 2. Inferência")
     st.write("### 3. Defuzzificação")
 
