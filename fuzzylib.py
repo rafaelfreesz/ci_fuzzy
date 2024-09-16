@@ -7,10 +7,8 @@ def define_color(tg,groups,i_groups, is_area):
     color_line=["rgb(255,54,54)","rgb(61,54,255)","rgb(255,110,251)","rgb(255,241,110)","rgb(96,236,75)","rgb(75,231,236)","rgb(218,160,0)"]
 
     i=0
-    print(len(groups))
 
     while tg.f_spec != groups[i_groups].f_spec:
-        print(tg.f_spec,groups[i_groups].f_spec)
         i = i+1
         i_groups = i_groups + 1
 
@@ -60,7 +58,6 @@ def prepare_infer_assoc_mem(filename):
     index = 1
     for i in range(1,len(matriz)-1):
         for j in range(1,len(matriz[i])):
-            # print(j)
             rule = fe.Rule()
             rule.index=index
             rule.vars.append(matriz[i][0])

@@ -31,12 +31,12 @@ def build_graph_velocidade(velocidade,groups):
     x_m = np.linspace(38.0,113.0,int((113.0-38.0)*100.0))
     x_a = np.linspace(65.0,120.0,int((120.0-65.0)*100.0))
     
-    graph.add_trace(go.Scatter(x=x_b, y=ut.array_apply(x_b,groups[0].f), mode='lines', name=f"{groups[0].f_name}_{groups[0].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[1].f), mode='lines', name=f"{groups[1].f_name}_{groups[1].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_a, y=ut.array_apply(x_a,groups[2].f), mode='lines', name=f"{groups[2].f_name}_{groups[2].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_b, y=ut.array_apply(x_b,groups[0].f), mode='lines', name="Baixa"))
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[1].f), mode='lines', name="Média"))
+    graph.add_trace(go.Scatter(x=x_a, y=ut.array_apply(x_a,groups[2].f), mode='lines', name="Alta"))
     graph.add_vline(x=velocidade, line_width=3, line_dash="dash",line_color="green")
 
-    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Velocidade")
+    graph.update_layout(width=840, height = 250, margin = dict(t=20,b=0), title = "Velocidade(v)", xaxis_title="Velocidade (km/h)", yaxis_title="Pertinência")
     return graph
 
 #Retorna string para imprimir resultado da fuzzificação da Velocidade
@@ -50,17 +50,17 @@ def build_graph_distancia(distancia,groups):
     x_m = np.linspace(263.0,800.0,int((800.0-263.0)*100.0))
     x_l = np.linspace(438.0,800.0,int((800.0-438.0)*100.0))
     
-    graph.add_trace(go.Scatter(x=x_c, y=ut.array_apply(x_c,groups[3].f), mode='lines', name=f"{groups[3].f_name}_{groups[3].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[4].f), mode='lines', name=f"{groups[4].f_name}_{groups[4].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[5].f), mode='lines', name=f"{groups[5].f_name}_{groups[5].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_c, y=ut.array_apply(x_c,groups[3].f), mode='lines', name="Curta"))
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[4].f), mode='lines', name="Média"))
+    graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[5].f), mode='lines', name="Longa"))
     graph.add_vline(x=distancia, line_width=3, line_dash="dash",line_color="green")
 
-    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Distancia")
+    graph.update_layout(width=840, height = 250, margin = dict(t=20,b=0), title = "Distancia (d)", xaxis_title="Distância (m)", yaxis_title="Pertinência")
     return graph
 
 #Retorna string para imprimir resultado da fuzzificação da distancia
 def get_distancia_result_string(groups,distancia):
-    return f"distancia: x = {distancia}m  \n curta (b): {'{0:.3f}'.format(groups[0].f(distancia))}  \n Média (m): {'{0:.3f}'.format(groups[1].f(distancia))}  \n Longa(l): {'{0:.3f}'.format(groups[2].f(distancia))}"
+    return f"distancia: x = {distancia}m  \n Curta (b): {'{0:.3f}'.format(groups[3].f(distancia))}  \n Média (m): {'{0:.3f}'.format(groups[4].f(distancia))}  \n Longa(l): {'{0:.3f}'.format(groups[5].f(distancia))}"
 
 #Calcula e retorna os resultados da inferência
 def infer(groups,velocidade,distancia):
@@ -184,26 +184,19 @@ def build_graph_y(groups,triggered_groups):
 
     #Graficos variável de saída
     graph = go.Figure()
-    print("UUUUUUUUUUUU")
-    for g in groups:
-        print(g)
     
-    x_rm = np.linspace(0.0,groups[6].b,(int(groups[6].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_rm, y=ut.array_apply(x_rm,groups[6].f), mode='lines', name=f"{groups[6].f_name}_{groups[6].f_spec}"))
+    x_rm = np.linspace(0.0,groups[6].b,(int(groups[6].b)+1)*100)
+    graph.add_trace(go.Scatter(x=x_rm, y=ut.array_apply(x_rm,groups[6].f), mode='lines', name="Risco Mínimo", line=dict(color="rgb(255,54,54)")))
         
-    x_s = np.linspace(groups[7].a,groups[7].b,(int(groups[7].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_s, y=ut.array_apply(x_s,groups[7].f), mode='lines', name=f"{groups[7].f_name}_{groups[7].f_spec}"))
+    x_s = np.linspace(groups[7].a,groups[7].b,(int(groups[7].b)+1)*100)
+    graph.add_trace(go.Scatter(x=x_s, y=ut.array_apply(x_s,groups[7].f), mode='lines', name="Segura", line=dict(color="rgb(61,54,255)")))
     
-    x_a = np.linspace(groups[8].a,groups[8].b,(int(groups[8].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_a, y=ut.array_apply(x_a,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}"))
+    x_a = np.linspace(groups[8].a,groups[8].b,(int(groups[8].b)+1)*100)
+    graph.add_trace(go.Scatter(x=x_a, y=ut.array_apply(x_a,groups[8].f), mode='lines', name="Arriscada", line=dict(color="rgb(255,110,251)")))
     
-    x_p = np.linspace(groups[9].a,groups[9].m,(int(groups[9].m)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}"))
+    x_p = np.linspace(groups[9].a,groups[9].m,(int(groups[9].m)+1)*100)
+    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[9].f), mode='lines', name="Perigosa", line=dict(color="rgb(255,241,110)")))
     
-    print("AAAAAAAAAAAAAAAAA")
-    for r in triggered_groups:
-        print(r)
-
     #Gráficos de área para resultado
     for i in range(len(triggered_groups)):
         tg = triggered_groups[i]
@@ -233,10 +226,10 @@ def build_graph_y(groups,triggered_groups):
             plot = False
             print("DUMB")
         
-        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=i))
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines',stackgroup=i, showlegend=False, fillcolor=fl.define_color(tg,groups,6,True), line=dict(color=fl.define_color(tg,groups,6,False))))
         
     
-    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Saída")
+    graph.update_layout(width=840, height = 250, margin = dict(t=20,b=0), title = "Saída", xaxis_title="Ultrapassagem (u)", yaxis_title="Pertinência")
     return graph
 
 

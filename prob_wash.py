@@ -33,19 +33,19 @@ def build_graph_y(groups,triggered_groups):
     graph = go.Figure()
 
     x_mc = np.linspace(0,int(groups[6].b),int(groups[6].b)+1)
-    graph.add_trace(go.Scatter(x=x_mc, y=ut.array_apply(x_mc,groups[6].f), mode='lines', name=f"{groups[6].f_name}_{groups[6].f_spec}", line=dict(color="rgb(255,54,54)")))
+    graph.add_trace(go.Scatter(x=x_mc, y=ut.array_apply(x_mc,groups[6].f), mode='lines', name="Muito Curto", line=dict(color="rgb(255,54,54)")))
     
     x_c = np.linspace(int(groups[7].a),int(groups[7].b),int(groups[7].b)+1)
-    graph.add_trace(go.Scatter(x=x_c, y=ut.array_apply(x_c,groups[7].f), mode='lines', name=f"{groups[7].f_name}_{groups[7].f_spec}", line=dict(color="rgb(61,54,255)")))
+    graph.add_trace(go.Scatter(x=x_c, y=ut.array_apply(x_c,groups[7].f), mode='lines', name="Curto", line=dict(color="rgb(61,54,255)")))
     
     x_m = np.linspace(int(groups[8].a),int(groups[8].b),int(groups[8].b)+1)
-    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}", line=dict(color="rgb(255,110,251)")))
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name="Médio", line=dict(color="rgb(255,110,251)")))
     
     x_l = np.linspace(int(groups[9].a),int(groups[9].b),int(groups[9].b)+1)
-    graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}", line=dict(color="rgb(255,241,110)")))
+    graph.add_trace(go.Scatter(x=x_l, y=ut.array_apply(x_l,groups[9].f), mode='lines', name="Longo", line=dict(color="rgb(255,241,110)")))
     
     x_ml = np.linspace(int(groups[10].a),int(groups[10].m),int(groups[10].m-groups[10].a)+1)
-    graph.add_trace(go.Scatter(x=x_ml, y=ut.array_apply(x_ml,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}", line=dict(color="rgb(96,236,75)")))
+    graph.add_trace(go.Scatter(x=x_ml, y=ut.array_apply(x_ml,groups[10].f), mode='lines', name="Muito Longo", line=dict(color="rgb(96,236,75)")))
    
     #Gráficos de área para resultado
     for i in range(len(triggered_groups)):
@@ -80,11 +80,11 @@ def build_graph_y(groups,triggered_groups):
         else:
             plot = False
         
-        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=i, fillcolor=fl.define_color(tg,groups,6,True), line=dict(color=fl.define_color(tg,groups,6,False))))
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', showlegend=False, stackgroup=i, fillcolor=fl.define_color(tg,groups,6,True), line=dict(color=fl.define_color(tg,groups,6,False))))
        
         
     
-    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Saída")
+    graph.update_layout(width=840, height = 250, margin = dict(t=20,b=0), xaxis_title="Tempo de Lavagem", yaxis_title="Pertinência", title = "Saída")
     return graph
 
 #Calcula e retorna as regioes conforme o metodo de Mamdani
@@ -241,12 +241,12 @@ def build_graph_sujeira(sujeira,groups):
     x_ms = np.linspace(int(groups[1].a),int(groups[1].b),int(groups[1].b)+1)
     x_gs = np.linspace(int(groups[2].a),int(groups[2].m),int(groups[2].m-groups[2].a)+1)
 
-    graph.add_trace(go.Scatter(x=x_ps, y=ut.array_apply(x_ps,groups[0].f), mode='lines', name=f"{groups[0].f_name}_{groups[0].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_ms, y=ut.array_apply(x_ms,groups[1].f), mode='lines', name=f"{groups[1].f_name}_{groups[1].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_gs, y=ut.array_apply(x_gs,groups[2].f), mode='lines', name=f"{groups[2].f_name}_{groups[2].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_ps, y=ut.array_apply(x_ps,groups[0].f), mode='lines', name = "Pouca"))
+    graph.add_trace(go.Scatter(x=x_ms, y=ut.array_apply(x_ms,groups[1].f), mode='lines', name = "Média"))
+    graph.add_trace(go.Scatter(x=x_gs, y=ut.array_apply(x_gs,groups[2].f), mode='lines', name = "Grande"))
     graph.add_vline(x=sujeira, line_width=3, line_dash="dash",line_color="green")
-
-    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Quantidade de Sujeira")
+    flag = 'x^2'
+    graph.update_layout(width=840, height = 250, margin = dict(t=20,b=0), xaxis_title="Sujeira", yaxis_title="Pertinência", title = f'Quantidade de Sujeira (X1)')
     return graph
 
 #Retorna string para imprimir resultado da fuzzificação da quantidade de sujeira
@@ -260,12 +260,12 @@ def build_graph_mancha(mancha,groups):
     x_mm = np.linspace(int(groups[4].a),int(groups[4].b),int(groups[1].b)+1)
     x_gm = np.linspace(int(groups[5].a),int(groups[5].m),int(groups[2].m-groups[2].a)+1)
 
-    graph.add_trace(go.Scatter(x=x_sm, y=ut.array_apply(x_sm,groups[3].f), mode='lines', name=f"{groups[3].f_name}_{groups[3].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_mm, y=ut.array_apply(x_mm,groups[4].f), mode='lines', name=f"{groups[4].f_name}_{groups[4].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_gm, y=ut.array_apply(x_gm,groups[5].f), mode='lines', name=f"{groups[5].f_name}_{groups[6].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_sm, y=ut.array_apply(x_sm,groups[3].f), mode='lines', name= "Sem Mancha"))
+    graph.add_trace(go.Scatter(x=x_mm, y=ut.array_apply(x_mm,groups[4].f), mode='lines', name= "Média Mancha"))
+    graph.add_trace(go.Scatter(x=x_gm, y=ut.array_apply(x_gm,groups[5].f), mode='lines', name= "Grande Mancha"))
     graph.add_vline(x=mancha, line_width=3, line_dash="dash",line_color="green")
 
-    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Quantidade de Mancha")
+    graph.update_layout(width=840, height = 250, margin = dict(t=20,b=0),xaxis_title="Mancha", yaxis_title="Pertinência", title = f'Quantidade de Mancha (X2)')
     return graph
 
 #Retorna string para imprimir resultado da fuzzificação da quantidade de sujeira

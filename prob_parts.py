@@ -33,25 +33,25 @@ def build_graph_y(groups,triggered_groups):
     
     
     x_mp = np.linspace(0.0,groups[9].d,(int(groups[9].d)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[9].f), mode='lines', name=f"{groups[9].f_name}_{groups[9].f_spec}", line=dict(color="rgb(255,54,54)")))
+    graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[9].f), mode='lines', name="Muito Pequeno", line=dict(color="rgb(255,54,54)")))
         
     x_p = np.linspace(groups[10].a,groups[10].b,(int(groups[10].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[10].f), mode='lines', name=f"{groups[10].f_name}_{groups[10].f_spec}", line=dict(color="rgb(61,54,255)")))
+    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[10].f), mode='lines', name="Pequeno", line=dict(color="rgb(61,54,255)")))
     
     x_pp = np.linspace(groups[11].a,groups[11].b,(int(groups[11].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_pp, y=ut.array_apply(x_pp,groups[11].f), mode='lines', name=f"{groups[11].f_name}_{groups[11].f_spec}", line=dict(color="rgb(255,110,251)")))
+    graph.add_trace(go.Scatter(x=x_pp, y=ut.array_apply(x_pp,groups[11].f), mode='lines', name="Pouco Pequeno", line=dict(color="rgb(255,110,251)")))
     
     x_m = np.linspace(groups[12].a,groups[12].b,(int(groups[12].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[12].f), mode='lines', name=f"{groups[12].f_name}_{groups[12].f_spec}", line=dict(color="rgb(255,241,110)")))
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[12].f), mode='lines', name="Médio", line=dict(color="rgb(255,241,110)")))
     
     x_pg = np.linspace(groups[13].a,groups[13].b,(int(groups[13].b)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_pg, y=ut.array_apply(x_pg,groups[13].f), mode='lines', name=f"{groups[13].f_name}_{groups[13].f_spec}", line=dict(color="rgb(96,236,75)")))
+    graph.add_trace(go.Scatter(x=x_pg, y=ut.array_apply(x_pg,groups[13].f), mode='lines', name="Grande", line=dict(color="rgb(96,236,75)")))
     
     x_g = np.linspace(groups[14].a,groups[14].b,(int(groups[14].b-groups[14].a)+1)*1000)
-    graph.add_trace(go.Scatter(x=x_g, y=ut.array_apply(x_g,groups[14].f), mode='lines', name=f"{groups[14].f_name}_{groups[14].f_spec}", line=dict(color="rgb(75,231,236)")))
+    graph.add_trace(go.Scatter(x=x_g, y=ut.array_apply(x_g,groups[14].f), mode='lines', name="Pouco Grande", line=dict(color="rgb(75,231,236)")))
     
     x_mg = np.linspace(groups[15].a,1,1000)
-    graph.add_trace(go.Scatter(x=x_mg, y=ut.array_apply(x_mg,groups[15].f), mode='lines', name=f"{groups[15].f_name}_{groups[15].f_spec}", line=dict(color="rgb(218,160,0)")))
+    graph.add_trace(go.Scatter(x=x_mg, y=ut.array_apply(x_mg,groups[15].f), mode='lines', name="Muito Grande", line=dict(color="rgb(218,160,0)")))
 
 
     #Gráficos de área para resultado
@@ -92,10 +92,10 @@ def build_graph_y(groups,triggered_groups):
             plot = False
             print("DUMB")
         
-        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines', name=f"y({tg.f_name}_{tg.f_spec})", stackgroup=i, fillcolor=fl.define_color(tg,groups,9,True), line=dict(color=fl.define_color(tg,groups,9,False))))
+        graph.add_trace(go.Scatter(x=xs, y=ut.array_apply(xs,tg.f), mode='lines',showlegend=False, stackgroup=i, fillcolor=fl.define_color(tg,groups,9,True), line=dict(color=fl.define_color(tg,groups,9,False))))
         
     
-    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Saída")
+    graph.update_layout(width=840, height = 280, xaxis_title="Número de Peças Extras", yaxis_title="Pertinência", margin = dict(t=20,b=0), title = "Saída (n)")
     return graph
 
 
@@ -170,12 +170,12 @@ def build_graph_funcionarios(funcionarios,groups):
     x_p = np.linspace(0.4,0.8,int((0.8-0.4)*10000.0))
     x_m = np.linspace(0.6,1.0,int((1.0-0.6)*1000.0))
     
-    graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[6].f), mode='lines', name=f"{groups[6].f_name}_{groups[6].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[7].f), mode='lines', name=f"{groups[7].f_name}_{groups[7].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name=f"{groups[8].f_name}_{groups[8].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[6].f), mode='lines', name="Pequeno"))
+    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[7].f), mode='lines', name="Médio"))
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[8].f), mode='lines', name="Grande"))
     graph.add_vline(x=funcionarios, line_width=3, line_dash="dash",line_color="green")
 
-    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Número de Funcionários")
+    graph.update_layout(width=840, height = 280, margin = dict(t=20,b=0), xaxis_title="Número de Funcionários", yaxis_title="Pertinência", title = "Número de Funcionários (s)")
     return graph
 
 #Constroi e seta atributos do grafico de tempo
@@ -185,12 +185,12 @@ def build_graph_tempo(tempo,groups):
     x_p = np.linspace(0.1,0.5,int((0.5-0.1)*1000.0))
     x_m = np.linspace(0.4,0.7,int((0.7-0.4)*1000.0))
 
-    graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[0].f), mode='lines', name=f"{groups[0].f_name}_{groups[0].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[1].f), mode='lines', name=f"{groups[1].f_name}_{groups[1].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[2].f), mode='lines', name=f"{groups[2].f_name}_{groups[2].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_mp, y=ut.array_apply(x_mp,groups[0].f), mode='lines', name="Muito Pequeno"))
+    graph.add_trace(go.Scatter(x=x_p, y=ut.array_apply(x_p,groups[1].f), mode='lines', name="Pequeno"))
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[2].f), mode='lines', name="Médio"))
     graph.add_vline(x=tempo, line_width=3, line_dash="dash",line_color="green")
 
-    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Tempo Médio de Espera")
+    graph.update_layout(width=840, height = 280, margin = dict(t=20,b=0), xaxis_title="Tempo Médio de Espera", yaxis_title="Pertinência", title = "Tempo Médio de Espera (m)")
     return graph
 
 #Constroi e seta atributos do grafico de fator
@@ -200,12 +200,12 @@ def build_graph_fator(fator,groups):
     x_m = np.linspace(0.3,0.7,int((0.7-0.3)*1000.0))
     x_a = np.linspace(0.6,1.0,int((1.0-0.6)*1000.0))
 
-    graph.add_trace(go.Scatter(x=x_b, y=ut.array_apply(x_b,groups[3].f), mode='lines', name=f"{groups[3].f_name}_{groups[3].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[4].f), mode='lines', name=f"{groups[4].f_name}_{groups[4].f_spec}"))
-    graph.add_trace(go.Scatter(x=x_a, y=ut.array_apply(x_a,groups[5].f), mode='lines', name=f"{groups[5].f_name}_{groups[5].f_spec}"))
+    graph.add_trace(go.Scatter(x=x_b, y=ut.array_apply(x_b,groups[3].f), mode='lines', name="Baixo"))
+    graph.add_trace(go.Scatter(x=x_m, y=ut.array_apply(x_m,groups[4].f), mode='lines', name="Médio"))
+    graph.add_trace(go.Scatter(x=x_a, y=ut.array_apply(x_a,groups[5].f), mode='lines', name="Alto"))
     graph.add_vline(x=fator, line_width=3, line_dash="dash",line_color="green")
-
-    graph.update_layout(width=840, height = 180, margin = dict(t=20,b=0), title = "Fator de Utilização")
+    
+    graph.update_layout(width=840, height = 280, margin = dict(t=20,b=0), xaxis_title="Fator de Utilização", yaxis_title="Pertinência", title = f"Fator de Utilização(p) (Não Aplicável)")
     return graph
 
 #Retorna string para imprimir resultado da fuzzificação do Número de Funcionários
