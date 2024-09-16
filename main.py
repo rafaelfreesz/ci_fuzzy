@@ -131,7 +131,7 @@ def run_wash():
 problema_selecionado = st.sidebar.selectbox(
     "Selecione um Problema:",
     ("Home","Máquina de Lavar","Central de Peças", "Ultrapassagem"),
-    index=3
+    index=0
 )
 
 if problema_selecionado == "Máquina de Lavar":
