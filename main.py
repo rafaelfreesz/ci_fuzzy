@@ -2,8 +2,21 @@ import streamlit as st
 import plotly.graph_objects as go
 import probwash as p_wash
 import probautoparts as p_auto
+import home_data as hd
+
+def run_home():
+    dvu_graph = hd.build_speed_distance_graph();
+    st.plotly_chart(dvu_graph)
 
 def run_overtaking():
+    velocidade = st.sidebar.slider("Selecione o fator de utilização(p):", min_value=30.0, max_value=50.0,value=(30+50)/2,step=1.0)
+    distancia = st.sidebar.slider("Selecione a distância(m):", min_value=180.0, max_value=800.0,value=(180+800)/2,step=1.0)
+    metodo_defuzz = st.sidebar.selectbox(
+        "Selecione o Método de Defuzzificação:",
+        ("Média Ponderada","Centro de Gravidade - CoG"),
+        index=0
+    )
+
     st.write("### 1. Fuzzificação")
     st.write("### 2. Inferência")
     st.write("### 3. Defuzzificação")
@@ -94,3 +107,5 @@ elif problema_selecionado == "Autopeças":
     run_autoparts()
 elif problema_selecionado == "Ultrapassagem":
     run_overtaking()
+else:
+    run_home()
