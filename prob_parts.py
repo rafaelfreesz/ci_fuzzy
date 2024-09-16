@@ -138,7 +138,7 @@ def calculate_mamdani(triggered_rules,groups):
 
 
 def fuzzify(tempo, fator, funcionarios):
-    groups = fl.prepare_fuzz("02_autoparts/autoparts_x.csv")
+    groups = fl.prepare_fuzz("02_parts/parts_x.csv")
 
     graphs=[]
     strs=[]
@@ -222,7 +222,7 @@ def get_tempo_result_string(groups,tempo):
 
 #Calcula e retorna os resultados da inferência
 def infer(groups,tempo,funcionarios):
-    rules = fl.prepare_infer_assoc_mem("02_autoparts/autoparts_rules.csv")
+    rules = fl.prepare_infer_assoc_mem("02_parts/parts_rules.csv")
     
     val_tempo = [groups[0].f(tempo),groups[1].f(tempo),groups[2].f(tempo)]
     val_fator = [groups[3].f(funcionarios),groups[4].f(funcionarios),groups[5].f(funcionarios)]

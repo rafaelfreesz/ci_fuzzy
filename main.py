@@ -1,7 +1,7 @@
 import streamlit as st
 import plotly.graph_objects as go
 import prob_wash as p_wash
-import prob_autoparts as p_auto
+import prob_parts as p_parts
 import prob_overtaking as p_over
 import home_data as hd
 
@@ -46,7 +46,7 @@ def run_overtaking():
     st.write(res_str)
     st.write("FIM")
 
-def run_autoparts():
+def run_parts():
     tempo = st.sidebar.slider("Selecione o tempo de espera(m):", min_value=0.0, max_value=0.7,value=0.7/2,step=0.7/100)
     fator = st.sidebar.slider("Selecione o fator de utilização(p):", min_value=0.0, max_value=1.0,value=0.5,step=0.01)
     funcionarios = st.sidebar.slider("Selecione o numero de funcionarios(s):", min_value=0.0, max_value=1.0,value=0.5,step=0.01)
@@ -57,7 +57,7 @@ def run_autoparts():
     )
     
     st.write("### 1. Fuzzificação")
-    graphs, strs, groups = p_auto.fuzzify(tempo, fator, funcionarios)
+    graphs, strs, groups = p_parts.fuzzify(tempo, fator, funcionarios)
 
     #Imprimindo Gráfico de Tempo
     st.plotly_chart(graphs[0])
@@ -74,13 +74,13 @@ def run_autoparts():
     st.write("### 2. Inferência")
 
     st.write("**Se Tempo de espera(m) e Nº de Funcionários(s) então Nº de peças extras(n)**")
-    rules, str_rules, triggered_rules, str_triggered_rules = p_auto.infer(groups,tempo,funcionarios)
+    rules, str_rules, triggered_rules, str_triggered_rules = p_parts.infer(groups,tempo,funcionarios)
     
     st.write(str_rules + "\n Regras selecionadas de acordo com critério MAX-MIN:\n" + str_triggered_rules)
 
     st.write("### 3. Defuzzificação")
 
-    graph_y, res_str = p_auto.defuzzify(groups,triggered_rules, metodo_defuzz)
+    graph_y, res_str = p_parts.defuzzify(groups,triggered_rules, metodo_defuzz)
     st.plotly_chart(graph_y)
     st.write(res_str)
     st.write("FIM")
@@ -122,14 +122,14 @@ def run_wash():
 
 problema_selecionado = st.sidebar.selectbox(
     "Selecione um Problema:",
-    ("Home","Máquina de Lavar","Autopeças", "Ultrapassagem"),
+    ("Home","Máquina de Lavar","Central de Peças", "Ultrapassagem"),
     index=3
 )
 
 if problema_selecionado == "Máquina de Lavar":
     run_wash()
-elif problema_selecionado == "Autopeças":
-    run_autoparts()
+elif problema_selecionado == "Central de Peças":
+    run_parts()
 elif problema_selecionado == "Ultrapassagem":
     run_overtaking()
 else:
